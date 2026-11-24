@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apoorv Pandey | Self-Building Developer Portfolio</title>
+  <meta name="description" content="12-year-old full-stack developer, Class 7 student, and founder of UNIQUE MINDS. Creator of MyDoctorG, Jarvis AI, and 100+ Python projects." />
+  <meta property="og:title" content="Apoorv Pandey | Developer Portfolio" />
+  <meta property="og:description" content="Interactive self-building portfolio featuring MyDoctorG, Jarvis Voice AI, Computer Vision tools, Live Python Runner, and 100+ Python projects." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%230b0e14'/%3E%3Cpath d='M18 3L31 10.5V25.5L18 33L5 25.5V10.5L18 3Z' stroke='%23facc15' stroke-width='2.2' fill='none'/%3E%3Cpath d='M11.5 24.5L18 10.5L24.5 24.5' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M14 20H22' stroke='%23facc15' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08090c;
+      --wire: rgba(59, 130, 246, 0.45);
+      --accent: #facc15;
+      --accent-rgb: 250, 204, 21;
+    }
+    body {
+      background-color: var(--bg);
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .font-display { font-family: 'Anton', sans-serif; letter-spacing: 0.02em; }
+    .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+    /* Dynamic Accent Theme Overrides */
+    .accent-bg { background-color: var(--accent) !important; color: #08090c !important; }
+    .accent-text { color: var(--accent) !important; }
+    .accent-border { border-color: rgba(var(--accent-rgb), 0.5) !important; }
+
+    /* Wireframe-to-Real Self-Building Block */
+    .build-block {
+      position: relative;
+      border: 1px dashed var(--wire);
+      background: rgba(15, 23, 42, 0.25);
+      transition: border-color 0.5s ease, background 0.5s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .build-block::before, .build-block::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border: 1px solid #fff;
+      transition: opacity 0.4s ease;
+      z-index: 2;
+    }
+    .build-block::before { top: -3px; left: -3px; }
+    .build-block::after { bottom: -3px; right: -3px; }
+
+    .build-inner {
+      opacity: 0;
+      transform: translateY(8px) scale(0.985);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .build-block.built {
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.14);
+      background: rgba(15, 18, 25, 0.85);
+    }
+    .build-block.built::before, .build-block.built::after { opacity: 0.25; }
+    .build-block.built .build-inner {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* 3D Tilt & Mouse Spotlight Cards */
+    .tilt-card {
+      transform-style: preserve-3d;
+      will-change: transform;
+      overflow: hidden;
+    }
+    .tilt-card .spotlight-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(var(--accent-rgb), 0.18), transparent 70%);
+      z-index: 1;
+    }
+    .tilt-card:hover .spotlight-glow { opacity: 1; }
+
+    /* Dual-Row Continuous Marquee */
+    .marquee-wrap {
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      gap: 0.75rem;
+      animation: marqueeLeft 22s linear infinite;
+    }
+    .marquee-track.reverse {
+      animation: marqueeRight 24s linear infinite;
+    }
+    .marquee-wrap:hover .marquee-track {
+      animation-play-state: paused;
+    }
+    @keyframes marqueeLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes marqueeRight {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Ghost Builder Cursors Layer */
+    #builder-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 60;
+    }
+    .ghost-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+    .cursor-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: #09090b;
+      margin-left: 10px;
+      margin-top: -4px;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body class="selection:bg-yellow-400 selection:text-black pb-24">
+
+  <!-- 3D Firecrackers + Act 1: Parachute Rescue & Float-Away -> Act 2: High-Speed Express Train with Horn -->
+  <canvas id="celebration-canvas" class="fixed inset-0 pointer-events-none z-[45]"></canvas>
+
+  <!-- Multiplayer AI Builder Cursors Overlay -->
+  <div id="builder-canvas"></div>
+
+  <!-- Toast Notification -->
+  <div id="copy-toast" class="fixed bottom-20 right-5 z-[80] hidden px-4 py-2.5 rounded-lg bg-emerald-400 text-black font-mono-code text-xs font-bold shadow-xl">
+    ✓ Copied apporv2014@gmail.com!
+  </div>
+
+  <!-- Top Figma-style Status Bar with Theme Switcher, Sound Toggle, Cmd+K & Scroll Progress -->
+  <nav id="top-navbar" class="sticky top-0 z-50 bg-[#08090c]/90 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-5 py-2.5 flex items-center justify-between text-xs font-mono-code">
+      <a href="#" id="brand-logo-trigger" class="flex items-center gap-3 group" title="Triple-click for Secret Arcade Mode!">
+        <div class="relative w-9 h-9 rounded-xl bg-gradient-to-br from-yellow-400 via-amber-400 to-sky-400 p-[1.5px] shadow-[0_0_20px_rgba(250,204,21,0.35)] group-hover:scale-105 transition-transform">
+          <div class="w-full h-full rounded-[10px] bg-[#0b0e14] flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="apGrad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#facc15" />
+                  <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+              </defs>
+              <path d="M18 2.5L31 10V26L18 33.5L5 26V10L18 2.5Z" stroke="url(#apGrad)" stroke-width="2.2" fill="rgba(250,204,21,0.06)" />
+              <path d="M11.5 24.5L18 10.5L24.5 24.5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M14 20H22" stroke="#facc15" stroke-width="2.4" stroke-linecap="round" />
+              <circle cx="18" cy="6.5" r="1.8" fill="#38bdf8" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="flex flex-col leading-tight">
+          <div class="flex items-center gap-1.5">
+            <span class="text-white font-bold tracking-wide text-sm">APOORV</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          </div>
+          <span class="text-[10px] accent-text tracking-widest uppercase">UNIQUE MINDS</span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2 sm:gap-3.5 text-slate-400">
+        <a href="#journey" class="hidden md:inline hover:text-white transition">Journey</a>
+        <a href="#shipped" class="hidden md:inline hover:text-white transition">Shipped</a>
+        <a href="#github-live" class="hidden lg:inline hover:text-white transition">Live Repos</a>
+
+        <!-- Sound SFX Toggle Button -->
+        <button id="sound-toggle-btn" onclick="toggleSound()" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 text-[11px] transition" title="Toggle Web Audio SFX">
+          🔊 SFX
+        </button>
+
+        <!-- Theme Accent Switcher Dots -->
+        <div class="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 border border-white/10" title="Switch Theme Accent">
+          <button onclick="setThemeAccent('#facc15', '250, 204, 21')" class="w-3 h-3 rounded-full bg-yellow-400 hover:scale-125 transition" aria-label="Cyber Gold"></button>
+          <button onclick="setThemeAccent('#38bdf8', '56, 189, 248')" class="w-3 h-3 rounded-full bg-sky-400 hover:scale-125 transition" aria-label="Neon Cyan"></button>
+          <button onclick="setThemeAccent('#4ade80', '74, 222, 128')" class="w-3 h-3 rounded-full bg-emerald-400 hover:scale-125 transition" aria-label="Emerald Matrix"></button>
+        </div>
+
+        <!-- Cmd+K Quick Palette Trigger -->
+        <button onclick="openCmdPalette()" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 text-[11px] transition">
+          ⌘K
+        </button>
+
+        <button onclick="openPyModal('playground')" class="hidden sm:inline accent-text hover:underline">Run Py ▶</button>
+        <button id="rebuild-btn" class="px-2.5 py-1 rounded accent-bg font-semibold hover:opacity-90 transition">
+          🪂🚄 Replay Show
+        </button>
+      </div>
+    </div>
+    <!-- Live Scroll Progress Line -->
+    <div id="scroll-progress" class="h-[2px] w-0 bg-gradient-to-r from-yellow-400 via-sky-400 to-emerald-400 transition-[width] duration-75"></div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header id="hero" class="max-w-6xl mx-auto px-5 pt-28 pb-16">
+    <div class="grid lg:grid-cols-12 gap-8 items-center">
+
+      <!-- Left: Giant Display Title + Bio + Stats -->
+      <div class="lg:col-span-7 space-y-5">
+        <div class="build-block rounded-lg p-2 inline-block" data-step="1">
+          <div class="build-inner flex items-center gap-2 px-2 py-0.5 text-xs font-mono-code accent-text">
+            <span>Hello, I'm</span>
+            <button onclick="openPyModal('archive')" class="px-2 py-0.5 rounded bg-white/5 hover:bg-white/15 border accent-border transition">
+              100+ Python Projects ↗
+            </button>
+          </div>
+        </div>
+
+        <div class="build-block rounded-xl p-4" data-step="2">
+          <div class="build-inner">
+            <h1 class="font-display text-6xl sm:text-7xl lg:text-8xl uppercase leading-[0.95] text-white">
+              DEVELOPER<br />
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-yellow-400">APOORV.</span>
+            </h1>
+          </div>
+        </div>
+
+        <div class="build-block rounded-xl p-4" data-step="3">
+          <div class="build-inner text-slate-300 text-sm sm:text-base leading-relaxed">
+            12-year-old full-stack developer, Class 7 student, and founder of <strong class="text-white">UNIQUE MINDS</strong>. I build AI healthcare apps, Python voice assistants, and computer vision tools—and teach coding on <strong class="accent-text">Learn With Apoorv</strong>.
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="build-block rounded-xl p-3" data-step="4">
+          <div class="build-inner flex flex-wrap gap-2.5">
+            <a href="#shipped" class="px-4 py-2.5 rounded-lg accent-bg hover:opacity-90 font-bold text-sm transition">
+              Try Live Mini-Demos ↓
+            </a>
+            <button onclick="openPyModal('playground')" class="px-4 py-2.5 rounded-lg bg-emerald-400/15 hover:bg-emerald-400/25 border border-emerald-400/40 text-emerald-300 font-semibold text-sm transition">
+              ▶ Run Python in Browser
+            </button>
+            <a href="mailto:apporv2014@gmail.com" class="px-4 py-2.5 rounded-lg bg-sky-400/15 hover:bg-sky-400/25 border border-sky-400/40 text-sky-300 font-semibold text-sm transition">
+              ✉ Email Me
+            </a>
+            <button onclick="copyEmail()" class="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-slate-200 font-mono-code text-xs transition">
+              📋 Copy Email
+            </button>
+            <a href="https://github.com/Apoorv-mzp" target="_blank" class="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-white font-medium text-sm transition">
+              GitHub ↗
+            </a>
+            <a href="https://www.linkedin.com/in/apoorv-pandey-19a997398/" target="_blank" class="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-white font-medium text-sm transition">
+              LinkedIn ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 3 Big Metric Counters -->
+        <div class="grid grid-cols-3 gap-3 pt-2">
+          <div onclick="openPyModal('archive')" class="build-block rounded-xl p-4 cursor-pointer hover:border-yellow-400/60" data-step="5">
+            <div class="build-inner">
+              <div class="font-display text-3xl sm:text-4xl text-white">100+</div>
+              <div class="text-xs accent-text mt-1">Python Projects ↗</div>
+            </div>
+          </div>
+          <div class="build-block rounded-xl p-4" data-step="5">
+            <div class="build-inner">
+              <div class="font-display text-3xl sm:text-4xl accent-text">4</div>
+              <div class="text-xs text-slate-400 mt-1">Live Web Apps</div>
+            </div>
+          </div>
+          <div class="build-block rounded-xl p-4" data-step="5">
+            <div class="build-inner">
+              <div id="repo-stat" class="font-display text-3xl sm:text-4xl text-sky-400">9</div>
+              <div class="text-xs text-slate-400 mt-1">GitHub Repos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Brand Emblem Card + Interactive Developer Workstation Bento -->
+      <div class="lg:col-span-5 flex flex-col items-center gap-5">
+        <div class="build-block tilt-card rounded-2xl p-6 w-full max-w-[360px]" data-step="3">
+          <div class="spotlight-glow"></div>
+          <div class="build-inner flex flex-col items-center text-center space-y-4 relative z-10">
+            <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-yellow-400 via-amber-400 to-sky-400 p-[2px] shadow-[0_0_40px_rgba(250,204,21,0.28)]">
+              <div class="w-full h-full rounded-[22px] bg-[#0b0e14] flex items-center justify-center">
+                <svg width="56" height="56" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 2.5L31 10V26L18 33.5L5 26V10L18 2.5Z" stroke="url(#apGrad)" stroke-width="2.2" fill="rgba(250,204,21,0.08)" />
+                  <path d="M11.5 24.5L18 10.5L24.5 24.5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M14 20H22" stroke="#facc15" stroke-width="2.4" stroke-linecap="round" />
+                  <circle cx="18" cy="6.5" r="1.8" fill="#38bdf8" />
+                </svg>
+              </div>
+            </div>
+            <div>
+              <div class="font-display text-3xl uppercase tracking-wide text-white">UNIQUE MINDS</div>
+              <div class="text-xs font-mono-code text-slate-400 mt-0.5">AI • PYTHON • FULL-STACK WEB</div>
+            </div>
+            <span class="px-3.5 py-1 rounded-full accent-bg font-mono-code text-xs font-bold shadow-lg">
+              APOORV PANDEY • FOUNDER
+            </span>
+          </div>
+        </div>
+
+        <!-- Interactive Dev Workstation & Gear Bento Card -->
+        <div class="build-block tilt-card rounded-xl p-4 w-full max-w-[360px]" data-step="4">
+          <div class="spotlight-glow"></div>
+          <div class="build-inner space-y-2.5 text-xs font-mono-code relative z-10">
+            <div class="flex justify-between text-slate-400 border-b border-white/10 pb-1.5">
+              <span>WORKSTATION GEAR</span>
+              <span class="text-emerald-400">● macOS SEQUOIA</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="selectGear('mac')" class="gear-chip px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[11px] transition">💻 MacBook Pro</button>
+              <button onclick="selectGear('vscode')" class="gear-chip px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-sky-300 text-[11px] transition">⚡ VS Code + zsh</button>
+              <button onclick="selectGear('py')" class="gear-chip px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-yellow-300 text-[11px] transition">🐍 Python 3.14</button>
+              <button onclick="selectGear('cv')" class="gear-chip px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-emerald-300 text-[11px] transition">👁 YOLOv8 + OpenCV</button>
+              <button onclick="selectGear('cloud')" class="gear-chip px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-purple-300 text-[11px] transition">▲ Vercel + GitHub</button>
+            </div>
+            <div id="gear-detail" class="p-2.5 rounded-lg bg-white/5 border border-white/10 text-[11px] text-slate-300 leading-relaxed">
+              Click any gear pill above to inspect how Apoorv builds & deploys projects on macOS.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- SECTION 2: HOW I GOT HERE + INTERACTIVE VOICE-ENABLED JARVIS TERMINAL -->
+  <section id="journey" class="max-w-6xl mx-auto px-5 py-14 border-t border-white/10">
+    <div class="grid lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-6 space-y-4">
+        <div class="build-block rounded-xl p-4" data-scroll-build>
+          <div class="build-inner">
+            <h2 class="font-display text-5xl sm:text-6xl uppercase text-white">HOW I GOT HERE</h2>
+          </div>
+        </div>
+        <div class="build-block rounded-xl p-5" data-scroll-build>
+          <div class="build-inner space-y-3 text-sm sm:text-base text-slate-300 leading-relaxed">
+            <p>I'm a Class 7 student and self-taught builder creating real-world AI web apps, automation scripts, and computer vision tools on macOS.</p>
+            <p class="border-l-2 accent-border pl-3 text-white font-medium">
+              "From writing my first Python script to shipping 100+ projects and launching MyDoctorG—every build teaches me something new."
+            </p>
+          </div>
+        </div>
+
+        <!-- Year Milestones -->
+        <div class="space-y-3 pt-1">
+          <div class="build-block rounded-xl p-4" data-scroll-build>
+            <div class="build-inner flex items-center gap-4">
+              <span class="font-display text-3xl accent-text w-16">100+</span>
+              <p class="text-sm text-slate-300">Completed over 100 Python projects covering AI, OpenCV, YOLOv8, Flask, FastAPI, and automation.</p>
+            </div>
+          </div>
+          <div class="build-block rounded-xl p-4" data-scroll-build>
+            <div class="build-inner flex items-center gap-4">
+              <span class="font-display text-3xl text-sky-400 w-16">2026</span>
+              <p class="text-sm text-slate-300">Launched <strong class="text-white">MyDoctorG</strong> AI healthcare assistant on Vercel and built <strong class="text-white">Jarvis AI</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Interactive Voice-Enabled Jarvis CLI Terminal Sandbox -->
+      <div class="lg:col-span-6">
+        <div class="build-block rounded-2xl overflow-hidden" data-scroll-build>
+          <div class="build-inner bg-[#0c0e14]">
+            <div class="px-4 py-2.5 bg-white/5 border-b border-white/10 flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="ml-2 text-xs font-mono-code text-slate-400">jarvis-env — zsh</span>
+              </div>
+              <button id="mic-cmd-btn" onclick="startVoiceCommand()" class="px-2.5 py-0.5 rounded bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/40 text-rose-300 font-mono-code text-[11px] font-semibold transition">
+                🎤 Voice Cmd
+              </button>
+            </div>
+            <div id="term-output" class="p-4 h-64 overflow-y-auto font-mono-code text-xs space-y-2 text-slate-300">
+              <div class="text-emerald-400">Jarvis OS v2.6 initialized. Voice & Text CLI ready!</div>
+              <div class="text-slate-400">Type a command, click a quick chip, or click <span class="text-rose-300">🎤 Voice Cmd</span> and say <span class="accent-text">"express"</span>, <span class="text-sky-400">"arcade"</span>, or <span class="text-emerald-400">"python"</span>.</div>
+            </div>
+            <div class="px-4 py-2 border-t border-white/10 flex flex-wrap gap-1.5 bg-white/[0.02]">
+              <button onclick="runCmd('projects')" class="px-2 py-0.5 rounded bg-yellow-400/15 text-yellow-300 font-mono-code text-[11px] hover:bg-yellow-400/25">projects</button>
+              <button onclick="runCmd('skills')" class="px-2 py-0.5 rounded bg-sky-400/15 text-sky-300 font-mono-code text-[11px] hover:bg-sky-400/25">skills</button>
+              <button onclick="runCmd('express')" class="px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 font-mono-code text-[11px] hover:bg-amber-400/25">express</button>
+              <button onclick="runCmd('python')" class="px-2 py-0.5 rounded bg-emerald-400/15 text-emerald-300 font-mono-code text-[11px] hover:bg-emerald-400/25">python</button>
+              <button onclick="runCmd('arcade')" class="px-2 py-0.5 rounded bg-purple-400/15 text-purple-300 font-mono-code text-[11px] hover:bg-purple-400/25">arcade</button>
+              <button onclick="runCmd('contact')" class="px-2 py-0.5 rounded bg-rose-400/15 text-rose-300 font-mono-code text-[11px] hover:bg-rose-400/25">contact</button>
+              <button onclick="runCmd('clear')" class="px-2 py-0.5 rounded bg-white/10 text-slate-400 font-mono-code text-[11px] hover:text-white">clear</button>
+            </div>
+            <form id="term-form" class="px-4 py-3 border-t border-white/10 flex items-center gap-2 font-mono-code text-xs">
+              <span class="text-emerald-400">apoorv@mac ~ %</span>
+              <input id="term-input" type="text" placeholder="type 'help', 'express', 'python', or 'arcade'..." class="w-full bg-transparent text-white focus:outline-none" autocomplete="off" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: THINGS I'VE SHIPPED (3D TILT + SPOTLIGHT + LIVE MINI-DEMOS) -->
+  <section id="shipped" class="max-w-6xl mx-auto px-5 py-14 border-t border-white/10">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+      <div class="build-block rounded-xl p-4 inline-block" data-scroll-build>
+        <div class="build-inner">
+          <h2 class="font-display text-5xl sm:text-6xl uppercase text-white">THINGS I'VE SHIPPED</h2>
+          <p class="text-slate-400 text-sm mt-1">Hover cards for 3D spotlight tilt & test live interactive mini-demos inside.</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2.5 self-start sm:self-auto">
+        <button onclick="openPyModal('playground')" class="px-4 py-2.5 rounded-xl accent-bg font-mono-code text-xs font-bold hover:opacity-90 transition">
+          ▶ Live Python Sandbox (Pyodide)
+        </button>
+        <button onclick="openPyModal('archive')" class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border accent-border accent-text font-mono-code text-xs font-semibold transition">
+          🐍 100+ Python Archive →
+        </button>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Card 1: MyDoctorG -->
+      <div class="build-block tilt-card rounded-2xl p-5 flex flex-col justify-between" data-scroll-build>
+        <div class="spotlight-glow"></div>
+        <div class="build-inner relative z-10">
+          <div class="rounded-xl bg-[#070b12] border border-emerald-400/25 p-3 mb-4 space-y-2">
+            <div class="flex items-center justify-between text-[10px] font-mono-code">
+              <span class="text-emerald-400 font-bold">● LIVE SYMPTOM MINI-DEMO</span>
+              <span class="text-slate-500">MyDoctorG AI</span>
+            </div>
+            <div id="mdg-chat-box" class="h-20 overflow-y-auto text-[11px] font-mono-code space-y-1.5 pr-1 text-slate-300">
+              <div class="text-emerald-300">AI: Hi! Type a symptom (e.g. fever, headache, cough) to preview triage.</div>
+            </div>
+            <form id="mdg-demo-form" class="flex gap-1.5">
+              <input id="mdg-demo-input" type="text" placeholder="e.g. mild fever..." class="w-full px-2 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-mono-code text-white focus:outline-none focus:border-emerald-400" />
+              <button type="submit" class="px-2.5 py-1 rounded bg-emerald-400 text-black font-mono-code text-[11px] font-bold hover:bg-emerald-300">Ask</button>
+            </form>
+          </div>
+          <span class="px-2 py-0.5 rounded accent-bg font-mono-code text-[11px] font-bold">Live App</span>
+          <h3 class="font-display text-2xl uppercase text-white mt-2">MYDOCTORG</h3>
+          <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">AI-powered healthcare assistant, vitals tracker, and specialist finder powered by Groq & Gemini APIs.</p>
+        </div>
+        <div class="build-inner flex gap-4 pt-4 mt-4 border-t border-white/10 text-xs font-mono-code relative z-10">
+          <a href="https://mydoctorg-0001.vercel.app" target="_blank" class="accent-text hover:underline">Full Live App ↗</a>
+          <a href="https://github.com/Apoorv-mzp/MyDoctorG" target="_blank" class="text-slate-400 hover:text-white">GitHub ↗</a>
+        </div>
+      </div>
+
+      <!-- Card 2: Air Coloring -->
+      <div class="build-block tilt-card rounded-2xl p-5 flex flex-col justify-between" data-scroll-build>
+        <div class="spotlight-glow"></div>
+        <div class="build-inner relative z-10">
+          <div class="rounded-xl bg-[#070b12] border border-purple-400/25 p-2.5 mb-4">
+            <div class="flex items-center justify-between text-[10px] font-mono-code mb-1.5">
+              <span class="text-purple-300 font-bold">● DRAW HERE MINI-CANVAS</span>
+              <div class="flex items-center gap-1.5">
+                <button onclick="setBrush('#facc15')" class="w-3 h-3 rounded-full bg-yellow-400 ring-1 ring-white/50"></button>
+                <button onclick="setBrush('#38bdf8')" class="w-3 h-3 rounded-full bg-sky-400 ring-1 ring-white/50"></button>
+                <button onclick="setBrush('#f472b6')" class="w-3 h-3 rounded-full bg-pink-400 ring-1 ring-white/50"></button>
+                <button onclick="clearMiniDraw()" class="px-1.5 py-0.2 rounded bg-white/10 text-slate-300 hover:text-white">Clear</button>
+              </div>
+            </div>
+            <canvas id="mini-draw-canvas" width="280" height="96" class="w-full h-24 rounded-lg bg-black/60 cursor-crosshair border border-white/10"></canvas>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-sky-400 text-black font-mono-code text-[11px] font-bold">Computer Vision</span>
+          <h3 class="font-display text-2xl uppercase text-white mt-2">AIR COLORING</h3>
+          <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">Touchless air-drawing canvas controlled in real time using webcam hand gestures.</p>
+        </div>
+        <div class="build-inner flex gap-4 pt-4 mt-4 border-t border-white/10 text-xs font-mono-code relative z-10">
+          <a href="https://apoorv-mzp.github.io/Air_Coloring/" target="_blank" class="accent-text hover:underline">Webcam Version ↗</a>
+          <a href="https://github.com/Apoorv-mzp/Air_Coloring" target="_blank" class="text-slate-400 hover:text-white">GitHub ↗</a>
+        </div>
+      </div>
+
+      <!-- Card 3: Jarvis Voice AI -->
+      <div class="build-block tilt-card rounded-2xl p-5 flex flex-col justify-between" data-scroll-build>
+        <div class="spotlight-glow"></div>
+        <div class="build-inner relative z-10">
+          <div class="rounded-xl bg-[#070b12] border border-blue-400/25 p-3 mb-4 flex flex-col justify-between h-[142px]">
+            <div class="flex items-center justify-between text-[10px] font-mono-code">
+              <span class="text-blue-300 font-bold">● LIVE JARVIS VOICE DEMO</span>
+              <span id="jarvis-voice-status" class="text-slate-500">READY</span>
+            </div>
+            <div class="flex items-center justify-center gap-1 h-10" id="voice-bars">
+              <span class="w-1.5 h-3 bg-sky-400 rounded-full transition-all"></span>
+              <span class="w-1.5 h-6 bg-yellow-400 rounded-full transition-all"></span>
+              <span class="w-1.5 h-4 bg-purple-400 rounded-full transition-all"></span>
+              <span class="w-1.5 h-8 bg-emerald-400 rounded-full transition-all"></span>
+              <span class="w-1.5 h-5 bg-sky-400 rounded-full transition-all"></span>
+              <span class="w-1.5 h-3 bg-yellow-400 rounded-full transition-all"></span>
+            </div>
+            <button onclick="speakJarvisIntro()" class="w-full py-1.5 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 border border-blue-400/40 text-blue-200 font-mono-code text-[11px] font-semibold transition">
+              🔊 Speak Jarvis Intro
+            </button>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-purple-400 text-black font-mono-code text-[11px] font-bold">Python AI</span>
+          <h3 class="font-display text-2xl uppercase text-white mt-2">JARVIS VOICE AI</h3>
+          <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">macOS personal voice assistant integrating SpeechRecognition, pyttsx3, Gemini, Groq, and Cohere.</p>
+        </div>
+        <div class="build-inner flex gap-4 pt-4 mt-4 border-t border-white/10 text-xs font-mono-code relative z-10">
+          <a href="https://github.com/Apoorv-mzp/Jarvis-Project" target="_blank" class="accent-text hover:underline">Source Code ↗</a>
+        </div>
+      </div>
+
+      <!-- Card 4: Weather Website -->
+      <div class="build-block tilt-card rounded-2xl p-5 flex flex-col justify-between" data-scroll-build>
+        <div class="spotlight-glow"></div>
+        <div class="build-inner relative z-10">
+          <div class="rounded-xl bg-[#070b12] border border-cyan-400/25 p-3 mb-4 space-y-2">
+            <div class="flex items-center justify-between text-[10px] font-mono-code">
+              <span class="text-cyan-300 font-bold">● LIVE WEATHER MINI-PREVIEW</span>
+              <div class="flex gap-1">
+                <button onclick="showCityWeather('Bengaluru')" class="px-1.5 py-0.5 rounded bg-white/10 hover:bg-cyan-400/20 text-slate-200">BLR</button>
+                <button onclick="showCityWeather('New Delhi')" class="px-1.5 py-0.5 rounded bg-white/10 hover:bg-cyan-400/20 text-slate-200">DEL</button>
+                <button onclick="showCityWeather('Tokyo')" class="px-1.5 py-0.5 rounded bg-white/10 hover:bg-cyan-400/20 text-slate-200">TYO</button>
+              </div>
+            </div>
+            <div id="weather-mini-out" class="p-2 rounded bg-white/5 text-xs font-mono-code text-cyan-200 flex items-center justify-between">
+              <span>Bengaluru, IN</span>
+              <span class="accent-text font-bold">24°C • Clear</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-emerald-400 text-black font-mono-code text-[11px] font-bold">Live Web</span>
+          <h3 class="font-display text-2xl uppercase text-white mt-2">WEATHER WEBSITE</h3>
+          <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">Instant city weather search with live forecasts deployed on GitHub Pages.</p>
+        </div>
+        <div class="build-inner flex gap-4 pt-4 mt-4 border-t border-white/10 text-xs font-mono-code relative z-10">
+          <a href="https://apoorv-mzp.github.io/Whether-Website/" target="_blank" class="accent-text hover:underline">Live Site ↗</a>
+          <a href="https://github.com/Apoorv-mzp/Whether-Website" target="_blank" class="text-slate-400 hover:text-white">GitHub ↗</a>
+        </div>
+      </div>
+
+      <!-- Card 5: My Websites & Games + Secret Arcade Launcher -->
+      <div class="build-block tilt-card rounded-2xl p-5 flex flex-col justify-between md:col-span-2 lg:col-span-2" data-scroll-build>
+        <div class="spotlight-glow"></div>
+        <div class="build-inner relative z-10">
+          <div class="rounded-xl bg-[#070b12] border border-amber-400/25 p-3 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="text-[10px] font-mono-code text-amber-300 font-bold">● MINI-GAME SANDBOX: CODE LUCKY ROLL & ARCADE</div>
+              <div id="mini-game-status" class="text-xs font-mono-code text-slate-300 mt-1">Click Roll for developer luck (77+ wins) or launch Bug Blaster!</div>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <button onclick="playMiniRoll()" class="px-3.5 py-2 rounded-lg accent-bg hover:opacity-90 font-mono-code text-xs font-bold transition">
+                🎲 Roll
+              </button>
+              <button onclick="openArcadeModal()" class="px-3.5 py-2 rounded-lg bg-purple-500/25 hover:bg-purple-500/35 border border-purple-400/50 text-purple-200 font-mono-code text-xs font-bold transition">
+                👾 Bug Blaster
+              </button>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded accent-bg font-mono-code text-[11px] font-bold">Collection</span>
+          <h3 class="font-display text-2xl uppercase text-white mt-2">MY WEBSITES & GAMES</h3>
+          <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">A multi-project playground of custom browser games and interactive web experiments built with HTML, CSS, and JavaScript.</p>
+        </div>
+        <div class="build-inner flex gap-4 pt-4 mt-4 border-t border-white/10 text-xs font-mono-code relative z-10">
+          <a href="https://apoorv-mzp.github.io/My-websites-and-games/" target="_blank" class="accent-text hover:underline">Play Full Arcade ↗</a>
+          <a href="https://github.com/Apoorv-mzp/My-websites-and-games" target="_blank" class="text-slate-400 hover:text-white">GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3.5: LIVE AUTO-SYNCED GITHUB REPOSITORY FEED + LANGUAGE BREAKDOWN + HEATMAP -->
+  <section id="github-live" class="max-w-6xl mx-auto px-5 py-14 border-t border-white/10">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+      <div class="build-block rounded-xl p-4 inline-block" data-scroll-build>
+        <div class="build-inner">
+          <div class="flex items-center gap-2 text-xs font-mono-code text-emerald-400 mb-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>AUTO-SYNCED VIA GITHUB API</span>
+          </div>
+          <h2 class="font-display text-4xl sm:text-5xl uppercase text-white">LATEST GITHUB ACTIVITY</h2>
+        </div>
+      </div>
+      <a href="https://github.com/Apoorv-mzp?tab=repositories" target="_blank" class="text-xs font-mono-code accent-text hover:underline">
+        All Repositories ↗
+      </a>
+    </div>
+
+    <!-- Language Breakdown + Activity Pulse Grid -->
+    <div class="grid lg:grid-cols-12 gap-4 mb-5">
+      <div class="lg:col-span-7 p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2.5">
+        <div class="flex items-center justify-between text-xs font-mono-code">
+          <span class="text-slate-300 font-semibold">REPOSITORY LANGUAGE DISTRIBUTION</span>
+          <span id="lang-summary-text" class="accent-text text-[11px]">Calculating...</span>
+        </div>
+        <div id="lang-bar" class="w-full h-3 rounded-full bg-white/10 overflow-hidden flex"></div>
+        <div id="lang-legend" class="flex flex-wrap gap-3 text-[11px] font-mono-code text-slate-400"></div>
+      </div>
+
+      <div class="lg:col-span-5 p-4 rounded-xl bg-white/[0.03] border border-white/10 flex flex-col justify-between">
+        <div class="flex items-center justify-between text-xs font-mono-code mb-2">
+          <span class="text-slate-300 font-semibold">CODING STREAK MATRIX</span>
+          <span class="text-emerald-400 text-[11px]">2026 ACTIVE</span>
+        </div>
+        <div id="contrib-grid" class="grid grid-cols-16 gap-1" style="grid-template-columns: repeat(16, minmax(0, 1fr));"></div>
+      </div>
+    </div>
+
+    <div id="live-repos-grid" class="grid md:grid-cols-3 gap-4">
+      <div class="p-4 rounded-xl bg-white/5 border border-white/10 font-mono-code text-xs text-slate-400">
+        Syncing latest repositories from @Apoorv-mzp...
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: YOUTUBE CHANNEL & CERTIFICATIONS -->
+  <section id="creator" class="max-w-6xl mx-auto px-5 py-14 border-t border-white/10">
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="build-block tilt-card rounded-2xl p-6" data-scroll-build>
+        <div class="spotlight-glow"></div>
+        <div class="build-inner space-y-3 relative z-10">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded bg-rose-500 text-white font-mono-code text-xs font-bold">▶ YOUTUBE CREATOR</span>
+            <span class="text-xs font-mono-code text-slate-400">EdTech & Coding</span>
+          </div>
+          <h3 class="font-display text-3xl sm:text-4xl uppercase text-white">LEARN WITH APOORV</h3>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Teaching Python programming, full-stack web development, and hands-on coding projects to students in simple, step-by-step tutorials.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-1 text-xs font-mono-code text-slate-300">
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10">Python Tutorials</span>
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10">Web Dev Projects</span>
+            <span class="px-2.5 py-1 rounded bg-white/5 border border-white/10">AI Builds</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="build-block tilt-card rounded-2xl p-6" data-scroll-build>
+        <div class="spotlight-glow"></div>
+        <div class="build-inner space-y-3 relative z-10">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded bg-emerald-400 text-black font-mono-code text-xs font-bold">✓ VERIFIED CREDENTIAL</span>
+            <span class="text-xs font-mono-code text-slate-400">HackerRank</span>
+          </div>
+          <h3 class="font-display text-3xl sm:text-4xl uppercase text-white">PYTHON (INTERMEDIATE)</h3>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Certified in Python problem-solving, object-oriented programming, data structures, and algorithmic challenges on HackerRank.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-1 text-xs font-mono-code text-emerald-300">
+            <span class="px-2.5 py-1 rounded bg-emerald-400/10 border border-emerald-400/30">OOP & Classes</span>
+            <span class="px-2.5 py-1 rounded bg-emerald-400/10 border border-emerald-400/30">Data Structures</span>
+            <span class="px-2.5 py-1 rounded bg-emerald-400/10 border border-emerald-400/30">SQL & Python</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: DUAL-ROW CONTINUOUS TECH STACK MARQUEE -->
+  <section id="stack" class="max-w-6xl mx-auto px-5 py-14 border-t border-white/10">
+    <div class="build-block rounded-xl p-4 mb-6 inline-block" data-scroll-build>
+      <div class="build-inner">
+        <h2 class="font-display text-5xl sm:text-6xl uppercase text-white">WHAT I BUILD WITH</h2>
+      </div>
+    </div>
+
+    <div class="build-block rounded-2xl py-6 px-3 space-y-4" data-scroll-build>
+      <div class="build-inner space-y-4">
+        <div class="marquee-wrap">
+          <div class="marquee-track">
+            <span class="px-4 py-2 rounded accent-bg font-display text-xl">PYTHON (100+ PROJECTS)</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">HTML5</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">TAILWIND CSS</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">JAVASCRIPT ES6+</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">NODE.JS</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">GIT & GITHUB</span>
+            <span class="px-4 py-2 rounded accent-bg font-display text-xl">PYTHON (100+ PROJECTS)</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">HTML5</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">TAILWIND CSS</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">JAVASCRIPT ES6+</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">NODE.JS</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">GIT & GITHUB</span>
+          </div>
+        </div>
+
+        <div class="marquee-wrap">
+          <div class="marquee-track reverse">
+            <span class="px-4 py-2 rounded bg-sky-400 text-black font-display text-xl">DJANGO / FLASK / FASTAPI</span>
+            <span class="px-4 py-2 rounded bg-emerald-400 text-black font-display text-xl">OPENCV & YOLOV8</span>
+            <span class="px-4 py-2 rounded bg-purple-400 text-black font-display text-xl">GEMINI & GROQ APIS</span>
+            <span class="px-4 py-2 rounded bg-rose-400 text-black font-display text-xl">MEDIAPIPE VISION</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">MYSQL / POSTGRESQL / SQLITE</span>
+            <span class="px-4 py-2 rounded bg-amber-300 text-black font-display text-xl">VERCEL & NETLIFY</span>
+            <span class="px-4 py-2 rounded bg-sky-400 text-black font-display text-xl">DJANGO / FLASK / FASTAPI</span>
+            <span class="px-4 py-2 rounded bg-emerald-400 text-black font-display text-xl">OPENCV & YOLOV8</span>
+            <span class="px-4 py-2 rounded bg-purple-400 text-black font-display text-xl">GEMINI & GROQ APIS</span>
+            <span class="px-4 py-2 rounded bg-rose-400 text-black font-display text-xl">MEDIAPIPE VISION</span>
+            <span class="px-4 py-2 rounded bg-white text-black font-display text-xl">MYSQL / POSTGRESQL / SQLITE</span>
+            <span class="px-4 py-2 rounded bg-amber-300 text-black font-display text-xl">VERCEL & NETLIFY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: PARTICLE MORPH CTA & DIRECT MESSAGE FOOTER -->
+  <footer id="contact" class="max-w-6xl mx-auto px-5 py-16 border-t border-white/10 text-center">
+    <div class="build-block rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-scroll-build>
+      <div class="build-inner flex flex-col items-center">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-400 via-amber-400 to-sky-400 p-[2px] shadow-[0_0_25px_rgba(250,204,21,0.3)] mb-3">
+          <div class="w-full h-full rounded-[14px] bg-[#0b0e14] flex items-center justify-center">
+            <svg width="30" height="30" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 2.5L31 10V26L18 33.5L5 26V10L18 2.5Z" stroke="url(#apGrad)" stroke-width="2.2" fill="rgba(250,204,21,0.06)" />
+              <path d="M11.5 24.5L18 10.5L24.5 24.5" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M14 20H22" stroke="#facc15" stroke-width="2.4" stroke-linecap="round" />
+              <circle cx="18" cy="6.5" r="1.8" fill="#38bdf8" />
+            </svg>
+          </div>
+        </div>
+
+        <canvas id="particle-word" class="w-full max-w-xl h-32 mb-2"></canvas>
+        <h2 class="font-display text-4xl sm:text-6xl uppercase text-white">GOT SOMETHING TO BUILD?</h2>
+        <p class="text-slate-400 text-sm mt-2 max-w-md">
+          Let's collaborate on Python automation, AI web apps, or full-stack builds.
+        </p>
+
+        <div class="flex items-center gap-3 mt-3">
+          <a href="mailto:apporv2014@gmail.com" class="accent-text hover:underline font-mono-code text-sm sm:text-base underline">
+            ✉ apporv2014@gmail.com
+          </a>
+          <button onclick="copyEmail()" class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-xs font-mono-code text-slate-200 transition">
+            Copy
+          </button>
+        </div>
+
+        <form id="quick-msg-form" class="w-full max-w-md mt-6 space-y-2.5 text-left">
+          <div class="grid sm:grid-cols-2 gap-2.5">
+            <input id="msg-name" name="name" type="text" required placeholder="Your Name" class="w-full px-3.5 py-2.5 rounded-lg bg-white/5 border border-white/15 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-yellow-400" />
+            <input id="msg-email" name="email" type="email" required placeholder="Your Email" class="w-full px-3.5 py-2.5 rounded-lg bg-white/5 border border-white/15 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-yellow-400" />
+          </div>
+          <textarea id="msg-body" name="message" rows="2" required placeholder="Tell Apoorv about your project or idea..." class="w-full px-3.5 py-2.5 rounded-lg bg-white/5 border border-white/15 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-yellow-400"></textarea>
+          <button id="msg-submit-btn" type="submit" class="w-full py-2.5 rounded-lg accent-bg hover:opacity-90 font-bold text-sm transition">
+            Send Direct Message to Apoorv ↗
+          </button>
+          <div id="msg-feedback" class="hidden text-center font-mono-code text-xs text-emerald-400 pt-1"></div>
+        </form>
+
+        <div class="flex flex-wrap justify-center gap-3 mt-6">
+          <a href="https://github.com/Apoorv-mzp" target="_blank" class="px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold text-xs font-mono-code transition">
+            GitHub (@Apoorv-mzp) ↗
+          </a>
+          <a href="https://www.linkedin.com/in/apoorv-pandey-19a997398/" target="_blank" class="px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold text-xs font-mono-code transition">
+            LinkedIn Profile ↗
+          </a>
+        </div>
+
+        <div class="text-xs font-mono-code text-slate-500 mt-8">
+          © 2026 Apoorv Pandey • UNIQUE MINDS by APOORV • apporv2014@gmail.com
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING SECTION PILL DOCK -->
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 px-3 py-1.5 rounded-full bg-[#0e121b]/90 backdrop-blur-md border border-white/15 shadow-2xl flex items-center gap-1.5 sm:gap-2 text-[11px] font-mono-code">
+    <a href="#hero" class="px-2.5 py-1 rounded-full hover:bg-white/10 text-slate-200 transition">Top</a>
+    <a href="#journey" class="px-2.5 py-1 rounded-full hover:bg-white/10 text-slate-200 transition">CLI</a>
+    <a href="#shipped" class="px-2.5 py-1 rounded-full hover:bg-white/10 accent-text font-semibold transition">Demos</a>
+    <a href="#github-live" class="px-2.5 py-1 rounded-full hover:bg-white/10 text-slate-200 transition">Repos</a>
+    <button onclick="openPyModal('playground')" class="px-2.5 py-1 rounded-full hover:bg-white/10 text-emerald-300 transition">Py ▶</button>
+    <button onclick="openCmdPalette()" class="px-2.5 py-1 rounded-full accent-bg font-bold transition">⌘K</button>
+  </div>
+
+  <!-- FLOATING "ASK APOORV'S AI TWIN" CHAT WIDGET -->
+  <div class="fixed bottom-4 right-4 z-[65]">
+    <div id="ai-twin-panel" class="hidden mb-3 w-80 sm:w-96 rounded-2xl bg-[#0e1118]/95 backdrop-blur-md border accent-border shadow-2xl overflow-hidden">
+      <div class="px-4 py-3 bg-white/5 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="font-mono-code text-xs font-bold text-white">Apoorv's AI Twin</span>
+        </div>
+        <button onclick="toggleAiTwin()" class="text-xs font-mono-code text-slate-400 hover:text-white">✕</button>
+      </div>
+      <div id="ai-twin-messages" class="p-3.5 h-56 overflow-y-auto space-y-2.5 text-xs font-mono-code text-slate-300">
+        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 text-emerald-300">
+          Hi! I'm Apoorv's AI Twin. Ask me about MyDoctorG, Jarvis AI, Python projects, YouTube, or freelance websites!
+        </div>
+      </div>
+      <div class="px-3 py-1.5 border-t border-white/10 flex flex-wrap gap-1 bg-white/[0.02]">
+        <button onclick="askAiTwin('Tell me about MyDoctorG')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-mono-code text-slate-200">MyDoctorG?</button>
+        <button onclick="askAiTwin('What is Jarvis AI?')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-mono-code text-slate-200">Jarvis AI?</button>
+        <button onclick="askAiTwin('Can Apoorv build a website?')" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] font-mono-code text-slate-200">Freelance?</button>
+      </div>
+      <form id="ai-twin-form" class="p-2.5 border-t border-white/10 flex gap-1.5">
+        <input id="ai-twin-input" type="text" placeholder="Ask anything about Apoorv..." class="w-full px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-mono-code text-white focus:outline-none focus:border-yellow-400" />
+        <button type="submit" class="px-3 py-1.5 rounded-lg accent-bg font-mono-code text-xs font-bold">Send</button>
+      </form>
+    </div>
+
+    <button onclick="toggleAiTwin()" class="ml-auto flex items-center gap-2 px-3.5 py-2.5 rounded-full accent-bg font-mono-code text-xs font-bold shadow-[0_0_25px_rgba(250,204,21,0.4)] hover:scale-105 transition-transform">
+      <span>💬 Ask AI Twin</span>
+    </button>
+  </div>
+
+  <!-- COMMAND PALETTE MODAL (Cmd+K / Ctrl+K) -->
+  <div id="cmd-modal" class="fixed inset-0 z-[85] hidden items-start justify-center bg-black/75 backdrop-blur-sm pt-24 p-4">
+    <div class="w-full max-w-lg rounded-2xl bg-[#0e1118] border accent-border shadow-2xl overflow-hidden">
+      <div class="p-3 border-b border-white/10 flex items-center gap-2">
+        <span class="accent-text font-mono-code text-xs font-bold">⌘K</span>
+        <input id="cmd-search" type="text" placeholder="Type a command or jump to section..." class="w-full bg-transparent text-xs font-mono-code text-white placeholder-slate-400 focus:outline-none" />
+        <button onclick="closeCmdPalette()" class="text-xs font-mono-code text-slate-400 hover:text-white">ESC</button>
+      </div>
+      <div id="cmd-list" class="p-2 max-h-72 overflow-y-auto space-y-1 text-xs font-mono-code"></div>
+    </div>
+  </div>
+
+  <!-- 100+ PYTHON PROJECTS EXPLORER & LIVE PYODIDE SANDBOX MODAL -->
+  <div id="py-modal" class="fixed inset-0 z-[75] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="w-full max-w-3xl rounded-2xl bg-[#0e1118] border accent-border shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 class="font-display text-2xl uppercase text-white">PYTHON LAB & 100+ PROJECTS</h3>
+          <p class="text-xs font-mono-code text-slate-400">Browse Apoorv's Python archive or run real Python code live in your browser</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="tab-archive-btn" onclick="switchPyTab('archive')" class="px-3 py-1.5 rounded-lg accent-bg font-mono-code text-xs font-bold transition">Archive (100+)</button>
+          <button id="tab-play-btn" onclick="switchPyTab('playground')" class="px-3 py-1.5 rounded-lg bg-white/10 text-slate-200 font-mono-code text-xs font-bold transition">▶ Run Python Live</button>
+          <button onclick="closePyModal()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-mono-code text-white">ESC ✕</button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Archive -->
+      <div id="py-archive-view">
+        <div class="p-3 border-b border-white/10">
+          <input id="py-search" type="text" placeholder="Filter Python projects (e.g. YOLO, MediaPipe, Jarvis, Hospital, Flask)..." class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-mono-code text-white placeholder-slate-400 focus:outline-none focus:border-yellow-400" />
+        </div>
+        <div id="py-list" class="p-4 max-h-80 overflow-y-auto grid sm:grid-cols-2 gap-3 text-xs"></div>
+      </div>
+
+      <!-- Tab 2: Live Pyodide Python Runner -->
+      <div id="py-playground-view" class="hidden p-4 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono-code">
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="loadPyPreset('train')" class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-yellow-300">🚂 Loco Pilot Assigner</button>
+            <button onclick="loadPyPreset('pass')" class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-sky-300">🔐 Password Gen</button>
+            <button onclick="loadPyPreset('fibonacci')" class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-emerald-300">🔢 AI Math Sequence</button>
+          </div>
+          <button id="run-py-btn" onclick="executeBrowserPython()" class="px-4 py-1.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-black font-bold transition">
+            ▶ Run Code
+          </button>
+        </div>
+        <textarea id="py-code-editor" rows="7" class="w-full p-3 rounded-xl bg-[#07090e] border border-white/15 font-mono-code text-xs text-emerald-200 focus:outline-none focus:border-emerald-400"></textarea>
+        <div>
+          <div class="text-[10px] font-mono-code text-slate-400 mb-1">TERMINAL OUTPUT (PYODIDE WEBASSEMBLY):</div>
+          <pre id="py-console-out" class="p-3 rounded-xl bg-black/70 border border-white/10 font-mono-code text-xs text-slate-200 h-28 overflow-y-auto whitespace-pre-wrap">Click "▶ Run Code" to execute real Python right in your browser!</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECRET ARCADE BUG BLASTER MODAL -->
+  <div id="arcade-modal" class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/85 backdrop-blur-md p-4">
+    <div class="w-full max-w-md rounded-2xl bg-[#0b0e14] border accent-border shadow-2xl overflow-hidden text-center">
+      <div class="p-3.5 border-b border-white/10 flex items-center justify-between font-mono-code text-xs">
+        <span class="accent-text font-bold">👾 UNIQUE MINDS: BUG BLASTER</span>
+        <span id="arcade-score" class="text-emerald-400 font-bold">SCORE: 0</span>
+        <button onclick="closeArcadeModal()" class="px-2.5 py-1 rounded bg-white/10 text-white">✕</button>
+      </div>
+      <div class="p-3">
+        <canvas id="arcade-canvas" width="380" height="320" class="w-full rounded-xl bg-[#06080c] border border-white/10 cursor-crosshair"></canvas>
+        <p class="text-[11px] font-mono-code text-slate-400 mt-2">Move mouse or touch to steer the AP Ship & auto-blast incoming bugs!</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Optional: Paste your Formspree endpoint URL here (e.g. "https://formspree.io/f/yourFormId")
+    const FORMSPREE_ENDPOINT = "";
+
+    // 1. Synthesized Web Audio SFX Engine (Zero External Audio Files)
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+      return audioCtx;
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById("sound-toggle-btn");
+      btn.textContent = soundEnabled ? "🔊 SFX" : "🔇 Muted";
+      if (soundEnabled) playUiClick();
+    }
+
+    function playUiClick() {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(620, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.045);
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.045);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.05);
+    }
+
+    function playSnapSfx() {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(480, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.14);
+      gain.gain.setValueAtTime(0.09, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    }
+
+    function playCatchSwooshSfx() {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(680, ctx.currentTime + 0.22);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.23);
+    }
+
+    function playTrainHornSfx() {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      // Realistic Dual-Blast Express Train Horn (Baa-Baaaa!)
+      const blasts = [
+        { start: 0, dur: 0.24 },
+        { start: 0.32, dur: 0.65 }
+      ];
+      blasts.forEach(b => {
+        [277.18, 349.23, 415.30].forEach(freq => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + b.start);
+          gain.gain.setValueAtTime(0.001, ctx.currentTime + b.start);
+          gain.gain.linearRampToValueAtTime(0.045, ctx.currentTime + b.start + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + b.start + b.dur);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + b.start);
+          osc.stop(ctx.currentTime + b.start + b.dur + 0.02);
+        });
+      });
+    }
+
+    function playPopSfx() {
+      if (!soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(160 + Math.random() * 90, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(42, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.13);
+    }
+
+    window.addEventListener("pointerdown", () => getAudioCtx(), { once: true });
+
+    // Workstation Gear Interactive Selector
+    const gearInfo = {
+      mac: "Intel MacBook Pro running macOS Sequoia — primary workstation for Python AI, OpenCV webcam builds, and full-stack web apps.",
+      vscode: "Visual Studio Code with zsh terminal, isolated Python virtual environments (jarvis-env), Git CLI, and Postman.",
+      py: "Python 3.11 & 3.14 powering 100+ projects: Flask, FastAPI, Django, speech_recognition, pyttsx3, and CLI systems.",
+      cv: "Real-time computer vision stack with Ultralytics YOLOv8, OpenCV, and Google MediaPipe hand landmark tracking.",
+      cloud: "Shipped live via GitHub (@Apoorv-mzp), Vercel (MyDoctorG), GitHub Pages, Supabase, and Formspree."
+    };
+    function selectGear(key) {
+      playUiClick();
+      document.getElementById("gear-detail").textContent = gearInfo[key];
+    }
+
+    // Theme Accent Switcher
+    function setThemeAccent(hex, rgb) {
+      document.documentElement.style.setProperty("--accent", hex);
+      document.documentElement.style.setProperty("--accent-rgb", rgb);
+      playUiClick();
+    }
+
+    // Live Scroll Progress Bar
+    window.addEventListener("scroll", () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+      document.getElementById("scroll-progress").style.width = `${pct}%`;
+    });
+
+    // 3D Tilt & Cursor Spotlight Effect on Cards
+    document.querySelectorAll(".tilt-card").forEach(card => {
+      const glow = card.querySelector(".spotlight-glow");
+      card.addEventListener("mousemove", e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rx = ((y / rect.height) - 0.5) * -8;
+        const ry = ((x / rect.width) - 0.5) * 8;
+        card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+        if (glow) {
+          glow.style.setProperty("--mx", `${x}px`);
+          glow.style.setProperty("--my", `${y}px`);
+        }
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)";
+      });
+    });
+
+    // 0. 3D Firecrackers + Act 1 (Parachute Rescue -> Float Away) -> Act 2 (High-Speed Express Train with Blowing Horn)
+    const celebCanvas = document.getElementById("celebration-canvas");
+    const cctx = celebCanvas.getContext("2d");
+    let cw = (celebCanvas.width = window.innerWidth);
+    let ch = (celebCanvas.height = window.innerHeight);
+    window.addEventListener("resize", () => {
+      cw = celebCanvas.width = window.innerWidth;
+      ch = celebCanvas.height = window.innerHeight;
+    });
+
+    const popColors = ["#facc15", "#38bdf8", "#4ade80", "#f472b6", "#a855f7", "#fb923c", "#ffffff"];
+    const FOV = 520;
+    let rockets3D = [];
+    let sparks3D = [];
+    let brokenPieces = [];
+    let celebEndTime = 0;
+    let lastWaveTime = 0;
+    let paraSeq = null;
+    let expressTrain = null;
+
+    function project3D(x, y, z) {
+      const scale = FOV / (FOV + z);
+      return {
+        sx: cw / 2 + x * scale,
+        sy: ch / 2 + y * scale,
+        scale
+      };
+    }
+
+    // ACT 1: Parachute Sequence
+    function spawnParachuteSequence() {
+      brokenPieces = [];
+      expressTrain = null;
+      paraSeq = {
+        phase: "bothDescend", // bothDescend -> oneBroke -> bothBrokeFalling -> rescueUp -> holdTop -> parachutesGo -> done
+        y: -110,
+        vy: 2.5,
+        leftIntact: true,
+        rightIntact: true,
+        rescueY: ch + 120,
+        paraFloatY: 0,
+        holdTimer: 0,
+        swayPhase: 0,
+        alpha: 1,
+        leftColor: "#facc15",
+        rightColor: "#38bdf8"
+      };
+    }
+
+    function breakSingleParachute(px, py, dir, col) {
+      playSnapSfx();
+      explode3DFirecracker(px - cw / 2, py - ch / 2, 0, col, false);
+      brokenPieces.push({
+        x: px,
+        y: py,
+        vx: dir * (3.8 + Math.random() * 2),
+        vy: -3.2,
+        rot: 0,
+        vRot: dir * 0.14,
+        color: col,
+        alpha: 1
+      });
+    }
+
+    function draw3DParachute(cx, cy, radius, c1, c2, tilt, attached = true) {
+      cctx.save();
+      cctx.translate(cx, cy);
+      cctx.rotate(tilt);
+
+      cctx.strokeStyle = "rgba(255, 255, 255, 0.78)";
+      cctx.lineWidth = 1.4;
+      [-radius, -radius * 0.45, 0, radius * 0.45, radius].forEach(rx => {
+        cctx.beginPath();
+        cctx.moveTo(rx, 0);
+        if (attached) {
+          cctx.lineTo(0, radius * 1.55);
+        } else {
+          cctx.lineTo(rx * 0.6, radius * 0.9);
+        }
+        cctx.stroke();
+      });
+
+      cctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+      cctx.beginPath();
+      cctx.ellipse(0, 0, radius, radius * 0.26, 0, 0, Math.PI * 2);
+      cctx.fill();
+
+      const domeGrad = cctx.createRadialGradient(-radius * 0.3, -radius * 0.55, 4, 0, -radius * 0.2, radius * 1.15);
+      domeGrad.addColorStop(0, "#ffffff");
+      domeGrad.addColorStop(0.3, c1);
+      domeGrad.addColorStop(1, "#0f172a");
+
+      cctx.fillStyle = domeGrad;
+      cctx.beginPath();
+      cctx.arc(0, 0, radius, Math.PI, 0, false);
+      cctx.quadraticCurveTo(0, radius * 0.22, -radius, 0);
+      cctx.fill();
+      cctx.lineWidth = 1.5;
+      cctx.strokeStyle = "rgba(255,255,255,0.85)";
+      cctx.stroke();
+
+      cctx.fillStyle = c2;
+      cctx.beginPath();
+      cctx.ellipse(0, -radius * 0.46, radius * 0.34, radius * 0.52, 0, Math.PI, 0, false);
+      cctx.fill();
+
+      cctx.restore();
+    }
+
+    function updateAndDrawParachuteSequence() {
+      for (let i = brokenPieces.length - 1; i >= 0; i--) {
+        const bp = brokenPieces[i];
+        bp.x += bp.vx;
+        bp.y += bp.vy;
+        bp.vy += 0.14;
+        bp.rot += bp.vRot;
+        bp.alpha -= 0.015;
+        if (bp.alpha <= 0) {
+          brokenPieces.splice(i, 1);
+          continue;
+        }
+        cctx.save();
+        cctx.globalAlpha = Math.max(0, bp.alpha);
+        draw3DParachute(bp.x, bp.y, 28, bp.color, "#ffffff", bp.rot, false);
+        cctx.restore();
+      }
+
+      if (!paraSeq) return;
+      const p = paraSeq;
+      p.swayPhase += 0.04;
+
+      const navH = document.getElementById("top-navbar").offsetHeight || 56;
+      const parkY = navH + 68;
+      const bannerW = Math.min(440, cw - 36);
+      const bannerH = 52;
+      const paraOffsetX = bannerW * 0.38;
+      const swayAmp = (p.phase === "holdTop" || p.phase === "parachutesGo") ? 6 : 20;
+      const swayX = Math.sin(p.swayPhase) * swayAmp;
+      const centerX = cw / 2 + swayX;
+      let tilt = Math.cos(p.swayPhase) * ((p.phase === "holdTop" || p.phase === "parachutesGo") ? 0.015 : 0.05);
+
+      if (p.phase === "bothDescend") {
+        p.y += p.vy;
+        if (p.y >= ch * 0.25) {
+          p.leftIntact = false;
+          breakSingleParachute(centerX - paraOffsetX, p.y - 44, -1, p.leftColor);
+          p.phase = "oneBroke";
+          p.vy = 3.1;
+        }
+      } else if (p.phase === "oneBroke") {
+        p.y += p.vy;
+        tilt = -0.22 + Math.sin(p.swayPhase * 2) * 0.05;
+        if (p.y >= ch * 0.46) {
+          p.rightIntact = false;
+          breakSingleParachute(centerX + paraOffsetX, p.y - 44, 1, p.rightColor);
+          p.phase = "bothBrokeFalling";
+          p.vy = 2.4;
+        }
+      } else if (p.phase === "bothBrokeFalling") {
+        p.vy += 0.38;
+        p.y += p.vy;
+        tilt = Math.sin(p.swayPhase * 3.5) * 0.18;
+
+        p.rescueY -= 16;
+        draw3DParachute(centerX - paraOffsetX, p.rescueY, 28, "#4ade80", "#facc15", -0.06, true);
+        draw3DParachute(centerX + paraOffsetX, p.rescueY, 28, "#f472b6", "#38bdf8", 0.06, true);
+
+        if (p.rescueY <= p.y - 44 || p.y >= ch * 0.76) {
+          playCatchSwooshSfx();
+          p.phase = "rescueUp";
+          p.leftIntact = true;
+          p.rightIntact = true;
+          p.leftColor = "#4ade80";
+          p.rightColor = "#f472b6";
+          p.vy = -5.4;
+        }
+      } else if (p.phase === "rescueUp") {
+        p.y += p.vy;
+        if (p.y <= parkY) {
+          p.y = parkY;
+          p.phase = "holdTop";
+          p.holdTimer = 0;
+        }
+      } else if (p.phase === "holdTop") {
+        p.holdTimer++;
+        if (p.holdTimer > 75) {
+          p.phase = "parachutesGo";
+          p.paraFloatY = p.y - 42;
+        }
+      } else if (p.phase === "parachutesGo") {
+        // Parachutes detach and float upward & away, banner fades out, then Express Train enters with blowing horn!
+        p.paraFloatY -= 5.5;
+        p.alpha -= 0.024;
+        if (p.alpha <= 0) {
+          paraSeq = null;
+          launchExpressTrain();
+          return;
+        }
+      }
+
+      cctx.save();
+      cctx.globalAlpha = Math.max(0, p.alpha);
+
+      const paraY = p.phase === "parachutesGo" ? p.paraFloatY : (p.y - 42);
+      const isAttached = p.phase !== "parachutesGo";
+      if (p.leftIntact) {
+        draw3DParachute(centerX - paraOffsetX, paraY, 27, p.leftColor, "#38bdf8", tilt, isAttached);
+      }
+      if (p.rightIntact) {
+        draw3DParachute(centerX + paraOffsetX, paraY, 27, p.rightColor, "#facc15", tilt, isAttached);
+      }
+
+      cctx.translate(centerX, p.y + bannerH / 2);
+      cctx.rotate(tilt * 0.75);
+
+      cctx.fillStyle = "#b45309";
+      cctx.beginPath();
+      cctx.roundRect(-bannerW / 2 + 4, -bannerH / 2 + 5, bannerW, bannerH, 14);
+      cctx.fill();
+
+      cctx.fillStyle = "rgba(11, 14, 20, 0.96)";
+      cctx.strokeStyle = (p.leftIntact && p.rightIntact) ? "#facc15" : "#f43f5e";
+      cctx.lineWidth = 2.5;
+      cctx.beginPath();
+      cctx.roundRect(-bannerW / 2, -bannerH / 2, bannerW, bannerH, 14);
+      cctx.fill();
+      cctx.stroke();
+
+      cctx.fillStyle = "#ffffff";
+      cctx.font = `900 ${bannerW < 340 ? 16 : 21}px Anton, Impact, sans-serif`;
+      cctx.textAlign = "center";
+      cctx.textBaseline = "middle";
+      cctx.fillText("WELCOME TO APOORV'S PORTFOLIO", 0, 1);
+      cctx.restore();
+    }
+
+    // ACT 2: High-Speed Express Train Arrival with Blowing Horn
+    function launchExpressTrain() {
+      playTrainHornSfx();
+      const totalWidth = Math.min(760, Math.max(520, cw * 0.62));
+      expressTrain = {
+        x: -totalWidth - 80,
+        width: totalWidth,
+        height: 48,
+        phase: "fastIn", // fastIn -> parked
+        hornTimer: 0,
+        wheelAngle: 0,
+        alpha: 1,
+        speedLines: Array.from({ length: 16 }, () => ({
+          x: Math.random() * cw,
+          y: (Math.random() - 0.5) * 65,
+          len: 45 + Math.random() * 85,
+          spd: 22 + Math.random() * 14
+        }))
+      };
+    }
+
+    function updateAndDrawExpressTrain() {
+      if (!expressTrain) return;
+      const t = expressTrain;
+      const navH = document.getElementById("top-navbar").offsetHeight || 56;
+      const trackY = navH + 66;
+      const targetCenterX = (cw - t.width) / 2;
+
+      if (t.phase === "fastIn") {
+        // High-speed bullet entry with smooth braking right at the center station
+        const dist = targetCenterX - t.x;
+        const step = Math.max(7, dist * 0.15);
+        t.x += step;
+        t.wheelAngle += step * 0.12;
+        if (Math.abs(dist) < 3) {
+          t.x = targetCenterX;
+          t.phase = "parked";
+          t.hornTimer = 45;
+        }
+      } else if (t.phase === "parked") {
+        t.wheelAngle += 0.02;
+        if (t.hornTimer > 0) t.hornTimer--;
+      }
+
+      cctx.save();
+      cctx.globalAlpha = t.alpha;
+
+      // Glowing Rail Track Line
+      const railY = trackY + t.height + 5;
+      const railGrad = cctx.createLinearGradient(0, railY, cw, railY);
+      railGrad.addColorStop(0, "transparent");
+      railGrad.addColorStop(0.2, "rgba(56, 189, 248, 0.45)");
+      railGrad.addColorStop(0.5, "rgba(250, 204, 21, 0.85)");
+      railGrad.addColorStop(0.8, "rgba(56, 189, 248, 0.45)");
+      railGrad.addColorStop(1, "transparent");
+      cctx.strokeStyle = railGrad;
+      cctx.lineWidth = 2;
+      cctx.beginPath();
+      cctx.moveTo(0, railY);
+      cctx.lineTo(cw, railY);
+      cctx.stroke();
+
+      // Speed Wind Streaks during high-speed arrival
+      if (t.phase === "fastIn") {
+        cctx.strokeStyle = "rgba(250, 204, 21, 0.42)";
+        cctx.lineWidth = 1.6;
+        t.speedLines.forEach(sl => {
+          sl.x -= sl.spd;
+          if (sl.x < -100) sl.x = cw + 100;
+          cctx.beginPath();
+          cctx.moveTo(sl.x, trackY + t.height / 2 + sl.y);
+          cctx.lineTo(sl.x + sl.len, trackY + t.height / 2 + sl.y);
+          cctx.stroke();
+        });
+      }
+
+      const noseW = 74;
+      const bodyW = t.width - noseW;
+      const tx = t.x;
+      const ty = trackY;
+      const th = t.height;
+
+      // Headlight Beam Cone on Right Nose
+      const beamGrad = cctx.createLinearGradient(tx + t.width, ty + th * 0.5, tx + t.width + 170, ty + th * 0.5);
+      beamGrad.addColorStop(0, "rgba(250, 204, 21, 0.55)");
+      beamGrad.addColorStop(1, "rgba(250, 204, 21, 0)");
+      cctx.fillStyle = beamGrad;
+      cctx.beginPath();
+      cctx.moveTo(tx + t.width - 6, ty + th * 0.35);
+      cctx.lineTo(tx + t.width + 170, ty - 14);
+      cctx.lineTo(tx + t.width + 170, ty + th + 18);
+      cctx.lineTo(tx + t.width - 6, ty + th * 0.65);
+      cctx.closePath();
+      cctx.fill();
+
+      // Visual Horn Sound Waves above engine nose while horn is blowing
+      if (t.phase === "fastIn" || t.hornTimer > 0) {
+        cctx.strokeStyle = "#facc15";
+        cctx.lineWidth = 2;
+        [10, 18, 26].forEach((r, idx) => {
+          cctx.globalAlpha = 0.85 - idx * 0.25;
+          cctx.beginPath();
+          cctx.arc(tx + t.width - 14, ty - 4, r, -Math.PI * 0.75, -Math.PI * 0.15);
+          cctx.stroke();
+        });
+        cctx.globalAlpha = t.alpha;
+      }
+
+      // Main Coach Chassis
+      cctx.fillStyle = "rgba(11, 14, 20, 0.96)";
+      cctx.strokeStyle = "#facc15";
+      cctx.lineWidth = 2;
+      cctx.beginPath();
+      cctx.roundRect(tx, ty, bodyW + 10, th, [12, 0, 0, 12]);
+      cctx.fill();
+      cctx.stroke();
+
+      // Express Racing Stripe
+      const stripeGrad = cctx.createLinearGradient(tx, ty, tx + t.width, ty);
+      stripeGrad.addColorStop(0, "#38bdf8");
+      stripeGrad.addColorStop(0.5, "#facc15");
+      stripeGrad.addColorStop(1, "#f97316");
+      cctx.fillStyle = stripeGrad;
+      cctx.fillRect(tx + 4, ty + th - 8, bodyW + 6, 4);
+
+      // Aerodynamic Bullet Engine Nose (Right Side)
+      cctx.fillStyle = "#0f172a";
+      cctx.strokeStyle = "#38bdf8";
+      cctx.lineWidth = 2;
+      cctx.beginPath();
+      cctx.moveTo(tx + bodyW + 6, ty);
+      cctx.quadraticCurveTo(tx + t.width + 14, ty + 4, tx + t.width, ty + th);
+      cctx.lineTo(tx + bodyW + 6, ty + th);
+      cctx.closePath();
+      cctx.fill();
+      cctx.stroke();
+
+      // Cockpit Windshield
+      cctx.fillStyle = "#38bdf8";
+      cctx.beginPath();
+      cctx.moveTo(tx + bodyW + 18, ty + 8);
+      cctx.quadraticCurveTo(tx + t.width - 6, ty + 10, tx + t.width - 10, ty + 24);
+      cctx.lineTo(tx + bodyW + 18, ty + 24);
+      cctx.closePath();
+      cctx.fill();
+
+      // Glowing Headlight Orb
+      cctx.fillStyle = "#ffffff";
+      cctx.beginPath();
+      cctx.arc(tx + t.width - 6, ty + th - 14, 4.5, 0, Math.PI * 2);
+      cctx.fill();
+
+      // Express Train Text Inside Coach
+      cctx.fillStyle = "#ffffff";
+      const fontSize = t.width < 580 ? 15 : 19;
+      cctx.font = `900 ${fontSize}px Anton, Impact, sans-serif`;
+      cctx.textAlign = "center";
+      cctx.textBaseline = "middle";
+      cctx.fillText("🚄 WELCOME TO APOORV'S PORTFOLIO EXPRESS", tx + bodyW / 2 + 4, ty + th / 2 - 2);
+
+      // Spinning Bogie Wheels
+      const wheelPositions = [tx + 36, tx + 76, tx + bodyW - 65, tx + bodyW - 25, tx + bodyW + 32];
+      wheelPositions.forEach(wx => {
+        const wy = ty + th + 1;
+        cctx.fillStyle = "#1e293b";
+        cctx.strokeStyle = "#facc15";
+        cctx.lineWidth = 1.6;
+        cctx.beginPath();
+        cctx.arc(wx, wy, 5.5, 0, Math.PI * 2);
+        cctx.fill();
+        cctx.stroke();
+
+        cctx.beginPath();
+        cctx.moveTo(wx + Math.cos(t.wheelAngle) * 4, wy + Math.sin(t.wheelAngle) * 4);
+        cctx.lineTo(wx - Math.cos(t.wheelAngle) * 4, wy - Math.sin(t.wheelAngle) * 4);
+        cctx.stroke();
+      });
+
+      cctx.restore();
+    }
+
+    function launch3DFirecrackerBurst(count = 20) {
+      for (let i = 0; i < count; i++) {
+        rockets3D.push({
+          x: (Math.random() - 0.5) * cw * 0.85,
+          y: ch / 2 + 30,
+          z: (Math.random() - 0.3) * 380,
+          vx: (Math.random() - 0.5) * 3.5,
+          vy: -(11.5 + Math.random() * 5),
+          vz: (Math.random() - 0.5) * 3.5,
+          targetY: -ch * (0.08 + Math.random() * 0.32),
+          color: popColors[Math.floor(Math.random() * popColors.length)]
+        });
+      }
+    }
+
+    function explode3DFirecracker(rx, ry, rz, baseColor, withPop = true) {
+      if (withPop && Math.random() > 0.65) playPopSfx();
+      const count = 48;
+      for (let i = 0; i < count; i++) {
+        const phi = Math.acos(1 - (2 * (i + 0.5)) / count);
+        const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+        const speed = 3.2 + Math.random() * 5.2;
+        sparks3D.push({
+          x: rx,
+          y: ry,
+          z: rz,
+          px: rx,
+          py: ry,
+          pz: rz,
+          vx: Math.sin(phi) * Math.cos(theta) * speed,
+          vy: Math.cos(phi) * speed,
+          vz: Math.sin(phi) * Math.sin(theta) * speed,
+          color: Math.random() > 0.25 ? baseColor : "#ffffff",
+          alpha: 1,
+          decay: 0.015 + Math.random() * 0.01
+        });
+      }
+    }
+
+    function start10SecCelebration() {
+      const now = performance.now();
+      celebEndTime = now + 11000;
+      lastWaveTime = now;
+      launch3DFirecrackerBurst(22);
+      spawnParachuteSequence();
+    }
+
+    function celebrationLoop(now) {
+      cctx.clearRect(0, 0, cw, ch);
+
+      if (now < celebEndTime && now - lastWaveTime > 1450) {
+        launch3DFirecrackerBurst(20);
+        lastWaveTime = now;
+      }
+
+      for (let i = rockets3D.length - 1; i >= 0; i--) {
+        const r = rockets3D[i];
+        r.x += r.vx;
+        r.y += r.vy;
+        r.z += r.vz;
+        r.vy += 0.16;
+
+        const p = project3D(r.x, r.y, r.z);
+        if (p.scale > 0) {
+          cctx.fillStyle = r.color;
+          cctx.beginPath();
+          cctx.arc(p.sx, p.sy, Math.max(1.2, 3 * p.scale), 0, Math.PI * 2);
+          cctx.fill();
+        }
+
+        if (r.y <= r.targetY || r.vy >= 0) {
+          explode3DFirecracker(r.x, r.y, r.z, r.color);
+          rockets3D.splice(i, 1);
+        }
+      }
+
+      sparks3D.sort((a, b) => b.z - a.z);
+
+      for (let i = sparks3D.length - 1; i >= 0; i--) {
+        const s = sparks3D[i];
+        s.px = s.x;
+        s.py = s.y;
+        s.pz = s.z;
+        s.x += s.vx;
+        s.y += s.vy;
+        s.z += s.vz;
+        s.vy += 0.07;
+        s.vx *= 0.97;
+        s.vy *= 0.97;
+        s.vz *= 0.97;
+        s.alpha -= s.decay;
+
+        if (s.alpha <= 0 || s.z < -FOV + 20) {
+          sparks3D.splice(i, 1);
+          continue;
+        }
+
+        const p1 = project3D(s.px, s.py, s.pz);
+        const p2 = project3D(s.x, s.y, s.z);
+
+        cctx.save();
+        cctx.globalAlpha = Math.max(0, s.alpha);
+        cctx.strokeStyle = s.color;
+        cctx.lineWidth = Math.max(1, 2.6 * p2.scale);
+        cctx.beginPath();
+        cctx.moveTo(p1.sx, p1.sy);
+        cctx.lineTo(p2.sx, p2.sy);
+        cctx.stroke();
+
+        cctx.fillStyle = "#ffffff";
+        cctx.beginPath();
+        cctx.arc(p2.sx, p2.sy, Math.max(0.8, 1.8 * p2.scale), 0, Math.PI * 2);
+        cctx.fill();
+        cctx.restore();
+      }
+
+      updateAndDrawParachuteSequence();
+      updateAndDrawExpressTrain();
+      requestAnimationFrame(celebrationLoop);
+    }
+
+    start10SecCelebration();
+    requestAnimationFrame(celebrationLoop);
+
+    // Command Palette (Cmd+K / Ctrl+K)
+    const cmdModal = document.getElementById("cmd-modal");
+    const cmdSearch = document.getElementById("cmd-search");
+    const cmdList = document.getElementById("cmd-list");
+    const paletteCommands = [
+      { label: "🪂🚄 Replay Parachute Rescue -> Portfolio Express Train", action: () => { window.scrollTo({ top: 0, behavior: "smooth" }); start10SecCelebration(); } },
+      { label: "▶ Run Live Python Code in Browser (Pyodide)", action: () => openPyModal("playground") },
+      { label: "👾 Launch Secret Arcade: Bug Blaster", action: () => openArcadeModal() },
+      { label: "💬 Chat with Apoorv's AI Twin", action: () => toggleAiTwin(true) },
+      { label: "🎤 Speak Voice Command to Jarvis CLI", action: () => { document.getElementById("journey").scrollIntoView({ behavior: "smooth" }); startVoiceCommand(); } },
+      { label: "🩺 Jump to MyDoctorG & Live Mini-Demos", action: () => document.getElementById("shipped").scrollIntoView({ behavior: "smooth" }) },
+      { label: "🐙 Jump to Live Auto-Synced GitHub Repos", action: () => document.getElementById("github-live").scrollIntoView({ behavior: "smooth" }) },
+      { label: "🐍 Open 100+ Python Projects Archive", action: () => openPyModal("archive") },
+      { label: "📋 Copy Email (apporv2014@gmail.com)", action: () => copyEmail() },
+      { label: "🎨 Switch Theme: Cyber Gold", action: () => setThemeAccent("#facc15", "250, 204, 21") },
+      { label: "🎨 Switch Theme: Neon Cyan", action: () => setThemeAccent("#38bdf8", "56, 189, 248") },
+      { label: "🎨 Switch Theme: Emerald Matrix", action: () => setThemeAccent("#4ade80", "74, 222, 128") }
+    ];
+
+    function renderPalette(q = "") {
+      const items = paletteCommands.filter(c => c.label.toLowerCase().includes(q.toLowerCase()));
+      cmdList.innerHTML = items.map((c, idx) => `
+        <button data-cmd-idx="${idx}" class="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/10 text-slate-200 flex items-center justify-between transition">
+          <span>${c.label}</span>
+          <span class="text-[10px] text-slate-500">↵</span>
+        </button>
+      `).join("");
+      cmdList.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          playUiClick();
+          items[Number(btn.dataset.cmdIdx)].action();
+          closeCmdPalette();
+        });
+      });
+    }
+
+    function openCmdPalette() {
+      playUiClick();
+      cmdModal.classList.remove("hidden");
+      cmdModal.classList.add("flex");
+      cmdSearch.value = "";
+      renderPalette();
+      cmdSearch.focus();
+    }
+    function closeCmdPalette() {
+      cmdModal.classList.add("hidden");
+      cmdModal.classList.remove("flex");
+    }
+    cmdModal.addEventListener("click", e => { if (e.target === cmdModal) closeCmdPalette(); });
+    cmdSearch.addEventListener("input", e => renderPalette(e.target.value));
+    window.addEventListener("keydown", e => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        cmdModal.classList.contains("hidden") ? openCmdPalette() : closeCmdPalette();
+      } else if (e.key === "Escape") {
+        closeCmdPalette();
+        closePyModal();
+        closeArcadeModal();
+      }
+    });
+
+    // 1. Live Interactive Mini-Demos Logic
+    const mdgResponses = {
+      fever: "Hydrate well, monitor temperature every 4 hrs, and consult a General Physician if >102°F.",
+      headache: "Rest in a low-light room, drink water, and check screen fatigue or blood pressure.",
+      cough: "Warm saline gargles & steam inhalation help; book a Pulmonologist if persistent >5 days."
+    };
+    document.getElementById("mdg-demo-form").addEventListener("submit", e => {
+      e.preventDefault();
+      playUiClick();
+      const inp = document.getElementById("mdg-demo-input");
+      const q = inp.value.trim();
+      if (!q) return;
+      const box = document.getElementById("mdg-chat-box");
+      const key = Object.keys(mdgResponses).find(k => q.toLowerCase().includes(k));
+      const ans = key ? mdgResponses[key] : "Matched with General Physician & Tele-Consult specialists on MyDoctorG!";
+      box.innerHTML += `<div class="text-white">You: ${q}</div><div class="text-emerald-300">AI: ${ans}</div>`;
+      box.scrollTop = box.scrollHeight;
+      inp.value = "";
+    });
+
+    const drawCanvas = document.getElementById("mini-draw-canvas");
+    const dctx = drawCanvas.getContext("2d");
+    let isDrawing = false;
+    let brushColor = "#facc15";
+    function setBrush(c) { brushColor = c; playUiClick(); }
+    function clearMiniDraw() { dctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height); playUiClick(); }
+    function getCanvasPos(e) {
+      const rect = drawCanvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (drawCanvas.width / rect.width),
+        y: (clientY - rect.top) * (drawCanvas.height / rect.height)
+      };
+    }
+    drawCanvas.addEventListener("pointerdown", e => {
+      isDrawing = true;
+      const pos = getCanvasPos(e);
+      dctx.beginPath();
+      dctx.moveTo(pos.x, pos.y);
+    });
+    drawCanvas.addEventListener("pointermove", e => {
+      if (!isDrawing) return;
+      const pos = getCanvasPos(e);
+      dctx.strokeStyle = brushColor;
+      dctx.lineWidth = 3;
+      dctx.lineCap = "round";
+      dctx.lineTo(pos.x, pos.y);
+      dctx.stroke();
+    });
+    window.addEventListener("pointerup", () => { isDrawing = false; });
+
+    function speakJarvisIntro() {
+      playUiClick();
+      const status = document.getElementById("jarvis-voice-status");
+      if (!("speechSynthesis" in window)) {
+        status.textContent = "UNSUPPORTED";
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance("Hello! I am Jarvis, Apoorv Pandey's personal AI assistant. Welcome to Apoorv's Portfolio Express!");
+      utter.rate = 1.05;
+      status.textContent = "SPEAKING...";
+      status.classList.add("text-emerald-400");
+      utter.onend = () => {
+        status.textContent = "READY";
+        status.classList.remove("text-emerald-400");
+      };
+      window.speechSynthesis.speak(utter);
+    }
+
+    const cityData = {
+      "Bengaluru": "24°C • Clear Sky",
+      "New Delhi": "27°C • Sunny Haze",
+      "Tokyo": "16°C • Crisp Breeze"
+    };
+    function showCityWeather(city) {
+      playUiClick();
+      document.getElementById("weather-mini-out").innerHTML = `
+        <span>${city}</span>
+        <span class="accent-text font-bold">${cityData[city]}</span>
+      `;
+    }
+
+    function playMiniRoll() {
+      playUiClick();
+      const score = Math.floor(Math.random() * 100) + 1;
+      const el = document.getElementById("mini-game-status");
+      if (score >= 77) {
+        launch3DFirecrackerBurst(12);
+        el.innerHTML = `<span class="text-emerald-400 font-bold">Rolled ${score}! 🎉 Jackpot Winner!</span>`;
+      } else {
+        el.innerHTML = `Rolled <span class="accent-text font-bold">${score}</span> — need 77+ to win. Try again!`;
+      }
+    }
+
+    // 2. Multiplayer Ghost Cursors That Assemble the Website
+    const builders = [
+      { name: "Apoorv.py", color: "#facc15" },
+      { name: "UI-Bot", color: "#38bdf8" },
+      { name: "AI-Agent", color: "#4ade80" },
+      { name: "CSS-Grid", color: "#f472b6" }
+    ];
+    const canvasLayer = document.getElementById("builder-canvas");
+    const cursorEls = builders.map((b, i) => {
+      const el = document.createElement("div");
+      el.className = "ghost-cursor";
+      el.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="${b.color}" stroke="#000" stroke-width="1.5">
+          <path d="M4 2L20 10L12 13L9 21L4 2Z"/>
+        </svg>
+        <div class="cursor-tag" style="background:${b.color}">${b.name}</div>
+      `;
+      el.style.transform = `translate(${window.innerWidth / 2 + (i - 1.5) * 40}px, ${window.innerHeight / 2}px)`;
+      canvasLayer.appendChild(el);
+      return el;
+    });
+
+    function moveBuilderTo(block, idx) {
+      const rect = block.getBoundingClientRect();
+      if (rect.width === 0) return;
+      const cur = cursorEls[idx % cursorEls.length];
+      const x = Math.min(window.innerWidth - 80, Math.max(10, rect.left + rect.width * (0.2 + (idx % 3) * 0.3)));
+      const y = Math.min(window.innerHeight - 40, Math.max(10, rect.top + rect.height * 0.4));
+      cur.style.opacity = "1";
+      cur.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function buildBlock(block, idx, delay = 0) {
+      setTimeout(() => {
+        moveBuilderTo(block, idx);
+        setTimeout(() => block.classList.add("built"), 260);
+      }, delay);
+    }
+
+    function runHeroBuild() {
+      document.querySelectorAll(".build-block").forEach(b => b.classList.remove("built"));
+      [...document.querySelectorAll("[data-step]")].forEach((block, i) => {
+        buildBlock(block, i, Number(block.dataset.step) * 260);
+      });
+    }
+    runHeroBuild();
+
+    const scrollObserver = new IntersectionObserver(entries => {
+      let batch = 0;
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.classList.contains("built")) {
+          buildBlock(entry.target, batch++, batch * 140);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll("[data-scroll-build]").forEach(el => scrollObserver.observe(el));
+
+    document.getElementById("rebuild-btn").addEventListener("click", () => {
+      playUiClick();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      start10SecCelebration();
+      setTimeout(runHeroBuild, 300);
+    });
+
+    // 3. Auto-Synced Live GitHub Repo Count + Language Breakdown + Heatmap + Top 3 Repos (Excluding My-portfolio)
+    const contribGrid = document.getElementById("contrib-grid");
+    const heatLevels = ["bg-white/5", "bg-emerald-900/60", "bg-emerald-600/70", "bg-emerald-400", "bg-yellow-400"];
+    for (let i = 0; i < 64; i++) {
+      const cell = document.createElement("span");
+      const lvl = i % 7 === 0 ? 4 : (i * 3) % 5;
+      cell.className = `h-2.5 rounded-[2px] ${heatLevels[lvl]}`;
+      contribGrid.appendChild(cell);
+    }
+
+    fetch("https://api.github.com/users/Apoorv-mzp")
+      .then(r => r.json())
+      .then(d => { if (d.public_repos) document.getElementById("repo-stat").textContent = d.public_repos; })
+      .catch(() => {});
+
+    fetch("https://api.github.com/users/Apoorv-mzp/repos?sort=updated&per_page=15")
+      .then(r => r.json())
+      .then(repos => {
+        if (!Array.isArray(repos)) return;
+        const cleanRepos = repos.filter(repo => repo.name.toLowerCase() !== "my-portfolio");
+
+        // Compute Language Distribution
+        const langCounts = {};
+        cleanRepos.forEach(r => {
+          const lang = r.language || "HTML";
+          langCounts[lang] = (langCounts[lang] || 0) + 1;
+        });
+        const total = Object.values(langCounts).reduce((a, b) => a + b, 0) || 1;
+        const langColors = { Python: "#facc15", HTML: "#38bdf8", JavaScript: "#4ade80", CSS: "#f472b6" };
+        const entries = Object.entries(langCounts).sort((a, b) => b[1] - a[1]);
+
+        document.getElementById("lang-summary-text").textContent = `${cleanRepos.length} Public Repos`;
+        document.getElementById("lang-bar").innerHTML = entries.map(([lang, count]) => {
+          const pct = Math.round((count / total) * 100);
+          return `<div style="width:${pct}%; background:${langColors[lang] || '#a855f7'}" title="${lang}: ${pct}%"></div>`;
+        }).join("");
+        document.getElementById("lang-legend").innerHTML = entries.map(([lang, count]) => {
+          const pct = Math.round((count / total) * 100);
+          return `<span class="flex items-center gap-1.5"><i class="w-2 h-2 rounded-full inline-block" style="background:${langColors[lang] || '#a855f7'}"></i>${lang} ${pct}%</span>`;
+        }).join("");
+
+        // Render Top 3 Latest Repos (Excluding My-portfolio)
+        const top3 = cleanRepos.slice(0, 3);
+        if (!top3.length) return;
+        const grid = document.getElementById("live-repos-grid");
+        grid.innerHTML = top3.map(repo => `
+          <a href="${repo.html_url}" target="_blank" class="p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-yellow-400/40 transition flex flex-col justify-between gap-3">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-mono-code font-bold text-sm text-white truncate">${repo.name}</span>
+                <span class="text-[11px] font-mono-code accent-text">★ ${repo.stargazers_count}</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1.5 line-clamp-2">${repo.description || "Built by Apoorv Pandey (@Apoorv-mzp)"}</p>
+            </div>
+            <div class="flex items-center justify-between text-[11px] font-mono-code text-slate-400 pt-2 border-t border-white/10">
+              <span class="px-2 py-0.5 rounded bg-white/5 text-sky-300">${repo.language || "Code"}</span>
+              <span>Updated ${new Date(repo.updated_at).toLocaleDateString("en-IN", { month: "short", day: "numeric" })} ↗</span>
+            </div>
+          </a>
+        `).join("");
+      })
+      .catch(() => {});
+
+    function copyEmail() {
+      playUiClick();
+      navigator.clipboard.writeText("apporv2014@gmail.com");
+      const toast = document.getElementById("copy-toast");
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 2400);
+    }
+
+    // 4. Direct Formspree Submission + Mailto Fallback + Celebration Burst
+    document.getElementById("quick-msg-form").addEventListener("submit", async e => {
+      e.preventDefault();
+      playUiClick();
+      const name = document.getElementById("msg-name").value.trim();
+      const email = document.getElementById("msg-email").value.trim();
+      const body = document.getElementById("msg-body").value.trim();
+      const btn = document.getElementById("msg-submit-btn");
+      const feedback = document.getElementById("msg-feedback");
+
+      if (FORMSPREE_ENDPOINT) {
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+        try {
+          const res = await fetch(FORMSPREE_ENDPOINT, {
+            method: "POST",
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, message: body })
+          });
+          if (res.ok) {
+            feedback.textContent = `✓ Message delivered directly to Apoorv!`;
+            feedback.classList.remove("hidden");
+            launch3DFirecrackerBurst(18);
+            e.target.reset();
+            btn.disabled = false;
+            btn.textContent = "Send Direct Message to Apoorv ↗";
+            return;
+          }
+        } catch (_) {}
+        btn.disabled = false;
+        btn.textContent = "Send Direct Message to Apoorv ↗";
+      }
+
+      feedback.textContent = `✓ Prepared message for apporv2014@gmail.com!`;
+      feedback.classList.remove("hidden");
+      launch3DFirecrackerBurst(16);
+      const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+      const mailBody = encodeURIComponent(`Hi Apoorv,\n\n${body}\n\nFrom: ${name} (${email})`);
+      window.location.href = `mailto:apporv2014@gmail.com?subject=${subject}&body=${mailBody}`;
+    });
+
+    // 5. Voice-Enabled Jarvis CLI Terminal
+    const termOut = document.getElementById("term-output");
+    const cmdMap = {
+      help: "Available commands: projects, skills, express, python, arcade, youtube, certs, contact, clear",
+      projects: "Featured: MyDoctorG (Vercel), Jarvis AI (Gemini/Groq), Air Coloring (CV), YOLOv8 Object Detector, Spider-Man Hand Tracker, Hospital & Train Systems (100+ total).",
+      skills: "Stack: Python, HTML5, Tailwind CSS, JavaScript, Node.js, Django, Flask, FastAPI, OpenCV, YOLOv8, MediaPipe, MySQL, PostgreSQL.",
+      youtube: "Channel: 'Learn With Apoorv' — teaching Python & full-stack web dev to students.",
+      certs: "Verified: HackerRank Python (Intermediate) Certification.",
+      contact: "Email: apporv2014@gmail.com | GitHub: github.com/Apoorv-mzp/Python-games"
+    };
+
+    function runCmd(raw) {
+      playUiClick();
+      const cmd = raw.trim().toLowerCase();
+      if (!cmd) return;
+      if (cmd === "clear") { termOut.innerHTML = ""; return; }
+      if (cmd.includes("express") || cmd.includes("train") || cmd.includes("celebrate") || cmd.includes("parachute")) {
+        start10SecCelebration();
+        termOut.innerHTML += `
+          <div><span class="text-emerald-400">apoorv@mac ~ %</span> <span class="text-white">${cmd}</span></div>
+          <div class="text-yellow-300 pl-3 border-l accent-border">🪂🚄 Replaying Parachute Rescue -> Portfolio Express Train with horn!</div>
+        `;
+        termOut.scrollTop = termOut.scrollHeight;
+        return;
+      }
+      if (cmd.includes("python") || cmd.includes("sandbox")) {
+        openPyModal("playground");
+        termOut.innerHTML += `
+          <div><span class="text-emerald-400">apoorv@mac ~ %</span> <span class="text-white">${cmd}</span></div>
+          <div class="text-emerald-300 pl-3 border-l accent-border">▶ Opening Live Browser Python Sandbox (Pyodide)...</div>
+        `;
+        termOut.scrollTop = termOut.scrollHeight;
+        return;
+      }
+      if (cmd.includes("arcade") || cmd.includes("game") || cmd.includes("blaster")) {
+        openArcadeModal();
+        termOut.innerHTML += `
+          <div><span class="text-emerald-400">apoorv@mac ~ %</span> <span class="text-white">${cmd}</span></div>
+          <div class="text-purple-300 pl-3 border-l accent-border">👾 Launching Secret Bug Blaster Arcade!</div>
+        `;
+        termOut.scrollTop = termOut.scrollHeight;
+        return;
+      }
+      const key = Object.keys(cmdMap).find(k => cmd.includes(k));
+      const reply = key ? cmdMap[key] : `Command not found: '${cmd}'. Try: help, projects, skills, express, python, arcade, contact`;
+      termOut.innerHTML += `
+        <div><span class="text-emerald-400">apoorv@mac ~ %</span> <span class="text-white">${cmd}</span></div>
+        <div class="text-slate-300 pl-3 border-l accent-border">${reply}</div>
+      `;
+      termOut.scrollTop = termOut.scrollHeight;
+    }
+
+    document.getElementById("term-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const inp = document.getElementById("term-input");
+      runCmd(inp.value);
+      inp.value = "";
+    });
+
+    function startVoiceCommand() {
+      playUiClick();
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const micBtn = document.getElementById("mic-cmd-btn");
+      if (!SR) {
+        termOut.innerHTML += `<div class="text-rose-400">Voice recognition is not supported in this browser. Type a command below!</div>`;
+        return;
+      }
+      const recog = new SR();
+      recog.lang = "en-IN";
+      micBtn.textContent = "🔴 Listening...";
+      recog.onresult = event => {
+        const spoken = event.results[0][0].transcript;
+        runCmd(spoken);
+      };
+      recog.onerror = () => { micBtn.textContent = "🎤 Voice Cmd"; };
+      recog.onend = () => { micBtn.textContent = "🎤 Voice Cmd"; };
+      recog.start();
+    }
+
+    // 6. Floating "Ask Apoorv's AI Twin" Chat Logic
+    function toggleAiTwin(forceOpen = null) {
+      playUiClick();
+      const panel = document.getElementById("ai-twin-panel");
+      if (forceOpen === true) {
+        panel.classList.remove("hidden");
+        return;
+      }
+      panel.classList.toggle("hidden");
+    }
+
+    function getAiTwinReply(q) {
+      const low = q.toLowerCase();
+      if (low.includes("mydoctorg") || low.includes("doctor") || low.includes("health")) {
+        return "MyDoctorG is Apoorv's AI healthcare web app live on Vercel (mydoctorg-0001.vercel.app) featuring symptom triage, vitals tracking, and specialist doctor search powered by Groq & Gemini APIs.";
+      }
+      if (low.includes("jarvis") || low.includes("voice")) {
+        return "Jarvis AI is Apoorv's macOS Python voice assistant using SpeechRecognition, pyttsx3, Gemini, Groq, and Cohere to launch apps and answer questions hands-free.";
+      }
+      if (low.includes("freelance") || low.includes("hire") || low.includes("website") || low.includes("contact")) {
+        return "Yes! Apoorv builds modern, fast web apps and Python automation tools. You can email him directly at apporv2014@gmail.com or use the contact form at the bottom!";
+      }
+      if (low.includes("youtube") || low.includes("channel") || low.includes("learn")) {
+        return "Apoorv teaches Python programming, AI projects, and web development on his YouTube channel 'Learn With Apoorv'.";
+      }
+      if (low.includes("python") || low.includes("project")) {
+        return "Apoorv has built 100+ Python projects including YOLOv8 object detection, MediaPipe hand tracking, Jarvis AI, and CLI management systems—and is HackerRank Python (Intermediate) certified!";
+      }
+      return "Apoorv Pandey is a 12-year-old Class 7 student & founder of UNIQUE MINDS, building AI web apps, Python assistants, and computer vision tools on macOS.";
+    }
+
+    function askAiTwin(question) {
+      playUiClick();
+      const box = document.getElementById("ai-twin-messages");
+      const ans = getAiTwinReply(question);
+      box.innerHTML += `
+        <div class="p-2 rounded-xl bg-yellow-400/15 text-white text-right">${question}</div>
+        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 text-emerald-300">${ans}</div>
+      `;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    document.getElementById("ai-twin-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const inp = document.getElementById("ai-twin-input");
+      const q = inp.value.trim();
+      if (!q) return;
+      askAiTwin(q);
+      inp.value = "";
+    });
+
+    // 7. 100+ Python Projects Archive + Live Pyodide WebAssembly Runner
+    const pyProjects = [
+      { title: "Jarvis AI Voice Assistant", tag: "Speech + Gemini + Groq", desc: "macOS voice assistant that opens apps, speaks replies, and answers AI queries." },
+      { title: "YOLOv8 Real-Time Detector", tag: "Computer Vision", desc: "Live webcam object detection using Ultralytics YOLOv8 and OpenCV." },
+      { title: "Spider-Man AI Web Shooter", tag: "MediaPipe + OpenCV", desc: "Webcam hand-tracking & gesture recognition app with visual web overlays." },
+      { title: "MyDoctorG Backend API", tag: "AI Healthcare", desc: "LLM-powered doctor finder, vitals tracker, and symptom assistant." },
+      { title: "Loco Pilot Train System", tag: "File I/O & Logic", desc: "Automated railway crew and train assignment system in Python." },
+      { title: "Hospital Management CLI", tag: "Data Management", desc: "Patient records, doctor scheduling, and billing management tool." },
+      { title: "Everyone Health Dictionary", tag: "Python + Web", desc: "Searchable medical terms and wellness reference directory." },
+      { title: "School & Topper Systems", tag: "Automation", desc: "Student grade analytics, rank calculation, and academic record tools." }
+    ];
+
+    const pyPresets = {
+      train: `import random\n\ntrains = ["12002 Shatabdi Express", "12951 Rajdhani Express", "22436 Vande Bharat Express", "12627 Karnataka Express"]\npilot = "Capt. Apoorv"\nassigned = random.choice(trains)\nprint(f"Loco Pilot: {pilot}")\nprint(f"Assigned Express: {assigned}")\nprint("Status: Ready for Departure!")`,
+      pass: `import random, string\n\nchars = string.ascii_letters + string.digits + "!@#$%"\npassword = "".join(random.choice(chars) for _ in range(14))\nprint("Generated Secure Password:", password)`,
+      fibonacci: `def fib(n):\n    a, b = 0, 1\n    seq = []\n    for _ in range(n):\n        seq.append(a)\n        a, b = b, a + b\n    return seq\n\nprint("First 12 Fibonacci numbers:", fib(12))`
+    };
+
+    function loadPyPreset(key) {
+      playUiClick();
+      document.getElementById("py-code-editor").value = pyPresets[key];
+    }
+    loadPyPreset("train");
+
+    let pyodideInstance = null;
+    async function executeBrowserPython() {
+      playUiClick();
+      const out = document.getElementById("py-console-out");
+      const btn = document.getElementById("run-py-btn");
+      const code = document.getElementById("py-code-editor").value;
+
+      btn.disabled = true;
+      btn.textContent = "⏳ Running...";
+      try {
+        if (!pyodideInstance) {
+          out.textContent = "Loading Python WebAssembly runtime (first run takes ~2 seconds)...";
+          if (!window.loadPyodide) {
+            await new Promise((resolve, reject) => {
+              const s = document.createElement("script");
+              s.src = "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";
+              s.onload = resolve;
+              s.onerror = reject;
+              document.head.appendChild(s);
+            });
+          }
+          pyodideInstance = await window.loadPyodide();
+        }
+        pyodideInstance.runPython(`
+import sys, io
+sys.stdout = io.StringIO()
+        `);
+        await pyodideInstance.runPythonAsync(code);
+        const stdout = pyodideInstance.runPython("sys.stdout.getvalue()");
+        out.textContent = stdout || "(Program finished with no output)";
+      } catch (err) {
+        out.textContent = `Python Error:\n${err.message}`;
+      }
+      btn.disabled = false;
+      btn.textContent = "▶ Run Code";
+    }
+
+    const pyModal = document.getElementById("py-modal");
+    const pyList = document.getElementById("py-list");
+    const pySearch = document.getElementById("py-search");
+
+    function renderPy(q = "") {
+      const filtered = pyProjects.filter(p =>
+        (p.title + p.tag + p.desc).toLowerCase().includes(q.toLowerCase())
+      );
+      pyList.innerHTML = filtered.map(p => `
+        <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <span class="font-bold text-white">${p.title}</span>
+            <span class="px-2 py-0.5 rounded bg-white/10 accent-text font-mono-code text-[10px]">${p.tag}</span>
+          </div>
+          <p class="text-slate-400 leading-relaxed">${p.desc}</p>
+        </div>
+      `).join("") + `
+        <a href="https://github.com/Apoorv-mzp/Python-games" target="_blank" class="sm:col-span-2 p-3 rounded-xl accent-bg font-mono-code font-bold text-center hover:opacity-90 transition">
+          Show All Python Projects & Practice on GitHub ↗
+        </a>
+      `;
+    }
+
+    function switchPyTab(tab) {
+      playUiClick();
+      const archView = document.getElementById("py-archive-view");
+      const playView = document.getElementById("py-playground-view");
+      const archBtn = document.getElementById("tab-archive-btn");
+      const playBtn = document.getElementById("tab-play-btn");
+      if (tab === "playground") {
+        archView.classList.add("hidden");
+        playView.classList.remove("hidden");
+        playBtn.className = "px-3 py-1.5 rounded-lg accent-bg font-mono-code text-xs font-bold transition";
+        archBtn.className = "px-3 py-1.5 rounded-lg bg-white/10 text-slate-200 font-mono-code text-xs font-bold transition";
+      } else {
+        playView.classList.add("hidden");
+        archView.classList.remove("hidden");
+        archBtn.className = "px-3 py-1.5 rounded-lg accent-bg font-mono-code text-xs font-bold transition";
+        playBtn.className = "px-3 py-1.5 rounded-lg bg-white/10 text-slate-200 font-mono-code text-xs font-bold transition";
+      }
+    }
+
+    function openPyModal(tab = "archive") {
+      playUiClick();
+      pyModal.classList.remove("hidden");
+      pyModal.classList.add("flex");
+      renderPy();
+      switchPyTab(tab);
+    }
+    function closePyModal() {
+      pyModal.classList.add("hidden");
+      pyModal.classList.remove("flex");
+    }
+    pyModal.addEventListener("click", e => { if (e.target === pyModal) closePyModal(); });
+    pySearch.addEventListener("input", e => renderPy(e.target.value));
+
+    // 8. Secret Arcade Bug Blaster Easter Egg (Konami Code or Triple-Click Logo)
+    const arcadeModal = document.getElementById("arcade-modal");
+    const aCanvas = document.getElementById("arcade-canvas");
+    const actx = aCanvas.getContext("2d");
+    let arcadeRunning = false;
+    let shipX = 190;
+    let lasers = [];
+    let bugs = [];
+    let arcadeScore = 0;
+    let arcadeTick = 0;
+
+    function openArcadeModal() {
+      playTrainHornSfx();
+      arcadeModal.classList.remove("hidden");
+      arcadeModal.classList.add("flex");
+      arcadeRunning = true;
+      arcadeScore = 0;
+      lasers = [];
+      bugs = [];
+      document.getElementById("arcade-score").textContent = "SCORE: 0";
+      requestAnimationFrame(arcadeLoop);
+    }
+    function closeArcadeModal() {
+      arcadeRunning = false;
+      arcadeModal.classList.add("hidden");
+      arcadeModal.classList.remove("flex");
+    }
+    arcadeModal.addEventListener("click", e => { if (e.target === arcadeModal) closeArcadeModal(); });
+
+    aCanvas.addEventListener("pointermove", e => {
+      const rect = aCanvas.getBoundingClientRect();
+      shipX = ((e.clientX - rect.left) / rect.width) * aCanvas.width;
+    });
+
+    function arcadeLoop() {
+      if (!arcadeRunning) return;
+      arcadeTick++;
+      actx.fillStyle = "#06080c";
+      actx.fillRect(0, 0, aCanvas.width, aCanvas.height);
+
+      if (arcadeTick % 12 === 0) {
+        lasers.push({ x: shipX, y: aCanvas.height - 34 });
+      }
+      if (arcadeTick % 32 === 0) {
+        bugs.push({ x: 24 + Math.random() * (aCanvas.width - 48), y: -15, vy: 1.8 + Math.random() * 1.4 });
+      }
+
+      // Draw Ship
+      actx.fillStyle = "#facc15";
+      actx.beginPath();
+      actx.moveTo(shipX, aCanvas.height - 34);
+      actx.lineTo(shipX - 14, aCanvas.height - 12);
+      actx.lineTo(shipX + 14, aCanvas.height - 12);
+      actx.closePath();
+      actx.fill();
+
+      // Lasers
+      actx.fillStyle = "#38bdf8";
+      for (let i = lasers.length - 1; i >= 0; i--) {
+        lasers[i].y -= 6;
+        actx.fillRect(lasers[i].x - 2, lasers[i].y, 4, 10);
+        if (lasers[i].y < 0) lasers.splice(i, 1);
+      }
+
+      // Bugs
+      actx.font = "18px sans-serif";
+      actx.textAlign = "center";
+      for (let i = bugs.length - 1; i >= 0; i--) {
+        const b = bugs[i];
+        b.y += b.vy;
+        actx.fillText("👾", b.x, b.y);
+        if (b.y > aCanvas.height + 10) {
+          bugs.splice(i, 1);
+          continue;
+        }
+        for (let j = lasers.length - 1; j >= 0; j--) {
+          if (Math.hypot(b.x - lasers[j].x, b.y - lasers[j].y) < 18) {
+            bugs.splice(i, 1);
+            lasers.splice(j, 1);
+            arcadeScore += 10;
+            playPopSfx();
+            document.getElementById("arcade-score").textContent = `SCORE: ${arcadeScore}`;
+            break;
+          }
+        }
+      }
+      requestAnimationFrame(arcadeLoop);
+    }
+
+    // Triple-click logo or Konami Code unlocks Arcade
+    let logoClicks = 0;
+    document.getElementById("brand-logo-trigger").addEventListener("click", () => {
+      logoClicks++;
+      setTimeout(() => { logoClicks = 0; }, 700);
+      if (logoClicks >= 3) openArcadeModal();
+    });
+
+    const konami = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+    let konamiIdx = 0;
+    window.addEventListener("keydown", e => {
+      if (e.key.toLowerCase() === konami[konamiIdx].toLowerCase()) {
+        konamiIdx++;
+        if (konamiIdx === konami.length) {
+          konamiIdx = 0;
+          openArcadeModal();
+        }
+      } else {
+        konamiIdx = 0;
+      }
+    });
+
+    // Particle Morph Footer
+    const pCanvas = document.getElementById("particle-word");
+    const ctx = pCanvas.getContext("2d");
+    pCanvas.width = 600;
+    pCanvas.height = 130;
+
+    const words = ["APOORV", "100+ PY", "BUILD"];
+    let wIndex = 0;
+    let particles = [];
+
+    function sampleWord(word) {
+      const off = document.createElement("canvas");
+      off.width = pCanvas.width;
+      off.height = pCanvas.height;
+      const octx = off.getContext("2d");
+      octx.fillStyle = "#fff";
+      octx.font = "900 84px Anton, Impact, sans-serif";
+      octx.textAlign = "center";
+      octx.textBaseline = "middle";
+      octx.fillText(word, off.width / 2, off.height / 2 + 6);
+
+      const data = octx.getImageData(0, 0, off.width, off.height).data;
+      const pts = [];
+      for (let y = 0; y < off.height; y += 5) {
+        for (let x = 0; x < off.width; x += 5) {
+          if (data[(y * off.width + x) * 4 + 3] > 128) pts.push({ x, y });
+        }
+      }
+      return pts;
+    }
+
+    function morphTo(word) {
+      const pts = sampleWord(word);
+      while (particles.length < pts.length) {
+        particles.push({
+          x: Math.random() * pCanvas.width,
+          y: Math.random() * pCanvas.height,
+          tx: 0, ty: 0,
+          c: Math.random() > 0.3 ? "#ffffff" : "#facc15"
+        });
+      }
+      particles.forEach((p, i) => {
+        const target = pts[i % pts.length];
+        p.tx = target.x;
+        p.ty = target.y;
+      });
+      particles.length = pts.length;
+    }
+
+    morphTo(words[0]);
+    setInterval(() => {
+      wIndex = (wIndex + 1) % words.length;
+      morphTo(words[wIndex]);
+    }, 2600);
+
+    (function animateParticles() {
+      ctx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      for (const p of particles) {
+        p.x += (p.tx - p.x) * 0.1;
+        p.y += (p.ty - p.y) * 0.1;
+        ctx.fillStyle = p.c;
+        ctx.fillRect(p.x, p.y, 2.4, 2.4);
+      }
+      requestAnimationFrame(animateParticles);
+    })();
+  </script>
+</body>
+</html>
